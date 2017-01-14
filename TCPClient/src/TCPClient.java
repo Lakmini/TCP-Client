@@ -22,7 +22,7 @@ public class TCPClient {
 		  int bytesRead=0;
 		  long startTime = System.nanoTime();    
 		// ... the code being measured ...    
-		
+		 // Dispay.showFrame();
 
 		  while(numberOfBytes<258048000+61440){	   
 			  outToServer.writeByte(1);
@@ -45,12 +45,13 @@ public class TCPClient {
 			  
 		  }
 		  long estimatedTime = System.nanoTime() - startTime;
+		  System.out.println("frame received,fps:"+numberOfBytes/(1280*1024*2)/(estimatedTime/1000000000)+" time: "+estimatedTime/1000000+"ms");
+			 
 			 // System.out.println("FROM SERVER: " + modifiedSentence);
 		  //}
 		  fos.write(new String(buf).getBytes());
 		  fos.close();
-		  System.out.println("frame received, time: "+estimatedTime/1000000+"ms");
-		  clientSocket.close();
+		   clientSocket.close();
 
 	}
 
