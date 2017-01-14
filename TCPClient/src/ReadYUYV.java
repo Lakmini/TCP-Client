@@ -4,6 +4,7 @@ import java.awt.image.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
+
 public class ReadYUYV {
 	int width;
 	int height;
@@ -17,11 +18,10 @@ public class ReadYUYV {
 
 	}
 
-	public void startReading(String filename) {
+	public void startReading(byte[] rawDataa) {
 		try {
-
-			Path path = Paths.get(filename);
-			byte[] rawData = Files.readAllBytes(path);
+			// Path path = Paths.get(filename);
+			byte[] rawData = rawDataa;
 			oneFrameLength = (int) (width * height);
 			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -88,4 +88,5 @@ public class ReadYUYV {
 	public BufferedImage getImage() {
 		return image;
 	}
+
 }
