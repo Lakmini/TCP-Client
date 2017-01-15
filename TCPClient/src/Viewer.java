@@ -69,8 +69,8 @@ public class Viewer {
 		frame.pack();
 		frame.setVisible(true);
 		//label.setIcon(icon);
-		//frame.pack();
-		//frame.setVisible(true);
+		frame.pack();
+		frame.setVisible(true);
 		
 		
 	}

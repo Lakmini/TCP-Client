@@ -5,7 +5,7 @@ public class TCPClient {
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		//String sentence;
 		  //String modifiedSentence;
-		 FileOutputStream fos = new FileOutputStream("img.bin");
+		 FileOutputStream fos = new FileOutputStream("out.bin");
 		 // BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
 		  Socket clientSocket = new Socket("192.168.1.10",7000);
 		  DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
@@ -24,11 +24,12 @@ public class TCPClient {
 		  long startTime = System.nanoTime();    
 		// ... the code being measured ...    
 		 // Dispay.showFrame();
-		  Viewer.initialize();
+		  Controller.start();
 		  for(int i=0;i<100;i++){
 			  numberOfBytes=0;
 			  bytesRecived=0;
 			  bytesRead=0;
+			 // Controller.start();
 			  while(numberOfBytes<2580480+61440){	   
 				  outToServer.writeByte(1);
 				  bytesRecived=0;
@@ -50,7 +51,13 @@ public class TCPClient {
 				  		  
 			  }
 			  totalBytes+=numberOfBytes;
-			  Viewer.updateFrame(buf);
+			  long start = System.nanoTime();  
+			  FrameBuffer.addToBuffer(buf);
+			  long time = System.nanoTime() - start;
+			  
+			  System.out.println("time: "+time+"ns");
+			
+//			  Viewer.updateFrame(buf);
 		  }
 		  
 		  long estimatedTime = System.nanoTime() - startTime;
@@ -59,7 +66,7 @@ public class TCPClient {
 			 
 			 // System.out.println("FROM SERVER: " + modifiedSentence);
 		  //}
-		  Viewer.updateFrame(buf);
+		 // Viewer.updateFrame(buf);
 		  fos.write(new String(buf).getBytes());
 		  fos.close();
 		  clientSocket.close();
