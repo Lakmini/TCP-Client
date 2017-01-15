@@ -29,7 +29,7 @@ public class TCPClient {
 			  numberOfBytes=0;
 			  bytesRecived=0;
 			  bytesRead=0;
-			  while(numberOfBytes<258048+61440){	   
+			  while(numberOfBytes<2580480+61440){	   
 				  outToServer.writeByte(1);
 				  bytesRecived=0;
 				  while( bytesRecived<61440){	
