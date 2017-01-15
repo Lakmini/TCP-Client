@@ -17,7 +17,7 @@ public class TCPClient {
 		  
 		 // for(int i=0;i<20;i++){
 		  outToServer.writeByte(1);
-		  int totalBytes=0;
+		  long totalBytes=0;
 		  int numberOfBytes=0;
 		  int bytesRecived=0;
 		  int bytesRead=0;
@@ -25,13 +25,14 @@ public class TCPClient {
 		// ... the code being measured ...    
 		 // Dispay.showFrame();
 		  Controller.start();
+		  Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 		  for(int i=0;i<100;i++){
 			  numberOfBytes=0;
 			  bytesRecived=0;
 			  bytesRead=0;
 			 // Controller.start();
-			  while(numberOfBytes<2580480+61440){	   
-				  outToServer.writeByte(1);
+			  while(numberOfBytes<258048){	   
+				//  outToServer.writeByte(1);
 				  bytesRecived=0;
 				  while( bytesRecived<61440){	
 	//				  if(numberOfBytes<258048000+61440){
@@ -51,18 +52,21 @@ public class TCPClient {
 				  		  
 			  }
 			  totalBytes+=numberOfBytes;
-			  long start = System.nanoTime();  
-			  FrameBuffer.addToBuffer(buf);
-			  long time = System.nanoTime() - start;
+			 // long start = System.nanoTime();  
+			//  new Thread(() -> {
+				  FrameBuffer.addToBuffer(buf);
+				//}).start();
 			  
-			  System.out.println("time: "+time+"ns");
+			 // long time = System.nanoTime() - start;
+			  
+		//	  System.out.println("time: "+time+"ns");
 			
 //			  Viewer.updateFrame(buf);
 		  }
 		  
 		  long estimatedTime = System.nanoTime() - startTime;
 		  
-		  System.out.println("frame received,fps:"+totalBytes/(1280*1024*2)/(estimatedTime/1000000000.0)+" time: "+estimatedTime/1000000+"ms");
+		  System.out.println("frame received,fps:"+totalBytes/(128*1024*2)/(estimatedTime/1000000000.0)+" time: "+estimatedTime/1000000+"ms");
 			 
 			 // System.out.println("FROM SERVER: " + modifiedSentence);
 		  //}

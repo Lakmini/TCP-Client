@@ -52,7 +52,7 @@ public class Viewer {
 		int width = 0;
 		int height = 0;
 		// height and width of the image frame ????
-		height = 960;
+		height = 124;
 		width = 1280;
 		BufferedImage currentImage;
 		ReadYUYV ryuv = new ReadYUYV(width, height);

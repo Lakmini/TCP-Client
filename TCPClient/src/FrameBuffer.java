@@ -12,7 +12,7 @@ public class FrameBuffer {
 	}
 	
 	public static char[] getFromBuffer(){
-		buffer.addLast(new char[2580480]);
+		
 		try{
 			char[] frame = buffer.getFirst();
 			buffer.removeFirst();
