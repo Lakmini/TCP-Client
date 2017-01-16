@@ -71,6 +71,7 @@ public class Viewer {
 		//label.setIcon(icon);
 		frame.pack();
 		frame.setVisible(true);
+		frame.repaint();
 		
 		
 	}
