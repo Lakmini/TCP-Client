@@ -12,7 +12,7 @@ public class TCPClient {
 		  BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		  System.out.println("Connected to server");
 		  
-		  char[] buf=new char[26004800];
+		  char[] buf=new char[260048000];
 		 // char[] buf=new char[129003048];
 		  
 		 // for(int i=0;i<20;i++){
@@ -24,15 +24,15 @@ public class TCPClient {
 		  long startTime = System.nanoTime();    
 		// ... the code being measured ...    
 		 // Dispay.showFrame();
-		  Controller.start();
+		  //Controller.start();
 		  Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 		  for(int i=0;i<100;i++){
 			  numberOfBytes=0;
 			  bytesRecived=0;
 			  bytesRead=0;
-			 // Controller.start();
-			  while(numberOfBytes<258048){	   
-				//  outToServer.writeByte(1);
+			
+			  while(numberOfBytes<2580480){	   
+				  outToServer.writeByte(1);
 				  bytesRecived=0;
 				  while( bytesRecived<61440){	
 	//				  if(numberOfBytes<258048000+61440){
@@ -53,9 +53,9 @@ public class TCPClient {
 			  }
 			  totalBytes+=numberOfBytes;
 			 // long start = System.nanoTime();  
-			//  new Thread(() -> {
-				  FrameBuffer.addToBuffer(buf);
-				//}).start();
+			
+				 // FrameBuffer.addToBuffer(buf);
+				
 			  
 			 // long time = System.nanoTime() - start;
 			  
@@ -66,7 +66,7 @@ public class TCPClient {
 		  
 		  long estimatedTime = System.nanoTime() - startTime;
 		  
-		  System.out.println("frame received,fps:"+totalBytes/(128*1024*2)/(estimatedTime/1000000000.0)+" time: "+estimatedTime/1000000+"ms");
+		  System.out.println("frame received,fps:"+totalBytes/(1280*1024*2)/(estimatedTime/1000000000.0)+" time: "+estimatedTime/1000000+"ms");
 			 
 			 // System.out.println("FROM SERVER: " + modifiedSentence);
 		  //}

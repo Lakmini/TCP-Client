@@ -14,13 +14,13 @@ public class Controller {
 					  char[] buf = FrameBuffer.getFromBuffer();
 					  if(buf!=null){
 						  System.out.println(imageNumber);
-							  try {
-								Viewer.updateFrame(buf);
+							 // try {
+								//Viewer.updateFrame(buf);
 								imageNumber++;
-							} catch (IOException e) {
+							//} catch (IOException e) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+								//e.printStackTrace();
+							//}
 							  //FileHandler.convertImages(new String(buf).getBytes(), imageNumber++);
 						 
 						  
