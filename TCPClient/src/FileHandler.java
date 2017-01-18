@@ -27,4 +27,20 @@ public class FileHandler {
 		}
 
 	}
+	public static void writeFile(byte[] rawData, int imageNumber)
+	{
+		new File("rowdataoutputImages").mkdir();
+		//long starttime;
+		//long time;
+		String path = "rowdataoutputImages/" + imageNumber + ".bin";
+		try {
+			//starttime=System.nanoTime();
+			Files.write(Paths.get(path),rawData);
+			//time=System.nanoTime()-starttime;
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+	}
 }
