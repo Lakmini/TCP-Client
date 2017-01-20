@@ -8,25 +8,19 @@ public class TCPClient {
 	final static int NUMBER_OF_FRAMES =  1000;
 	
 	public static void main(String[] args) throws UnknownHostException, IOException {
-		//String sentence;
-		  //String modifiedSentence;
-		// FileOutputStream fos = new FileOutputStream("out.bin");
-		 // BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
+
 		  Socket clientSocket = new Socket("192.168.1.10",7000);
 //	   	  Socket clientSocket = new Socket("127.0.0.1",7015);
 		  DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 		  InputStream in = clientSocket.getInputStream();
 		    DataInputStream dis = new DataInputStream(in);
 		  
-		  //BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		  
 		  System.out.println("Connected to server");
 		  
 		//  char[] buf=new char[737280];
 		  byte[] byteBuf = new byte[NUMBER_OF_BYTES_PER_FRAME];
-		 // char[] buf=new char[129003048];
-		  
-		 // for(int i=0;i<20;i++){
-//		  outToServer.writeByte(1);
+
 		  long totalByteCount=0;
 		  int frameByteCount=0;
 		  int bytesRecived=0;
@@ -76,7 +70,7 @@ public class TCPClient {
 		  
 		  long estimatedTime = System.nanoTime() - startTime;
 		  
-		  System.out.println("frame received,fps:"+totalByteCount/(1280*240*2)/(estimatedTime/1000000000.0)+" time: "+estimatedTime/1000000+"ms");
+		  System.out.println("frame received,fps:"+totalByteCount/(NUMBER_OF_BYTES_PER_FRAME)/(estimatedTime/1000000000.0)+" time: "+estimatedTime/1000000+"ms");
 
 		  clientSocket.close();
 
