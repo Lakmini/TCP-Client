@@ -21,27 +21,19 @@ public class TCPServer extends Thread {
 		            
 		            System.out.println("Just connected to " + server.getRemoteSocketAddress());
 		            DataInputStream in = new DataInputStream(server.getInputStream());
-		            
-		            System.out.println(in.readUTF());
-		          
-		           // DataOutputStream out = new DataOutputStream(server.getOutputStream());
-		            
-		            
-		          
-		            
-		            
 		            String name = "inputimages/Video_Color_Test_Pattern.YUYV";
 		            Path path = Paths.get(name);
 					byte[] rawData = Files.readAllBytes(path);
-					System.out.println(rawData);
-					DataOutputStream out = new DataOutputStream(server.getOutputStream());
-					out.writeInt(rawData.length);
-					out.write(rawData);
+		            while(true){
+			            System.out.println(in.readByte());
+			          
+			           // DataOutputStream out = new DataOutputStream(server.getOutputStream());
+						//System.out.println(rawData);
+						DataOutputStream out = new DataOutputStream(server.getOutputStream());
+						out.writeInt(rawData.length);
+						out.write(rawData);
+					}
 		          //  server.close();
-		            
-		         }catch(SocketTimeoutException s) {
-		            System.out.println("Socket timed out!");
-		           // break;
 		         }catch(IOException e) {
 		            e.printStackTrace();
 		           // break;
