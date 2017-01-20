@@ -1,6 +1,8 @@
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -9,7 +11,7 @@ public class FileHandler {
 		int width = 0;
 		int height = 0;
 		// height and width of the image frame ????
-		height = 200;
+		height = 240;
 		width = 1280;
 		BufferedImage currentImage;
 		// save images to "outputImages" folder

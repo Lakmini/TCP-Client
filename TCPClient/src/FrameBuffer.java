@@ -5,20 +5,20 @@ import java.util.NoSuchElementException;
 public class FrameBuffer {
 	//private static ArrayList<char[]> buffer= new ArrayList<>();
 	
-	private static LinkedList<char[]> buffer = new LinkedList<char[]>();
+	private static LinkedList<byte[]> buffer = new LinkedList<byte[]>();
 	
-	public static void addToBuffer(char[] frame){
+	public static void addToBuffer(byte[] frame){
 		buffer.addLast(frame);
 	}
 	
-	public static char[] getFromBuffer(){
+	public static byte[] getFromBuffer(){
 		
 		try{
-			char[] frame = buffer.getFirst();
+			byte[] frame = buffer.getFirst();
 			buffer.removeFirst();
 			return frame;
 		}catch(NoSuchElementException e){
-//			System.out.println("Frame Buffer is empty");
+		//	System.out.println("Frame Buffer is empty");
 			return null;
 		}
 		

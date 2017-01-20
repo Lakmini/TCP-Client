@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
 public class Controller {
@@ -6,20 +7,26 @@ public class Controller {
 	
 	private static int imageNumber=0;
 	public static void start(){
-		  Viewer.initialize();
+		  //Viewer.initialize();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			  @Override
 			  public void run() {
-				  
-					  char[] buf = FrameBuffer.getFromBuffer();
-					  if(buf!=null){
-						  FileHandler.writeFile(new String(buf).getBytes(), imageNumber++);
-						imageNumber++;
-						  
-					  }
-				 
+				  new Thread(new Runnable() {
+				         public void run(){
+							  byte[] buf = FrameBuffer.getFromBuffer();
+							  if(buf!=null){
+								  System.out.println(imageNumber);
+							 
+								FileHandler.convertImages(buf, imageNumber++);
+//							
+//								FileHandler.writeFile(buf, imageNumber++);
+													  
+							  }
+				         }
+				  }).start(); 
 
 			  }
-			}, 50, 50);
+			  
+			}, 5, 16);
 	}
 }

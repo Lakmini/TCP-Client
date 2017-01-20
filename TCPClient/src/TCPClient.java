@@ -1,78 +1,83 @@
 import java.io.*;
 import java.net.*;
 public class TCPClient {
-
+	final static int NUMBER_OF_BYTES_PER_PACKET =  61440;
+	final static int NUMBER_OF_BYTES_PER_LINE =  2560;
+	final static int NUMBER_OF_LINES_PER_FRAME =  240;
+	final static int NUMBER_OF_BYTES_PER_FRAME = NUMBER_OF_BYTES_PER_LINE*NUMBER_OF_LINES_PER_FRAME;
+	final static int NUMBER_OF_FRAMES =  1000;
+	
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		//String sentence;
 		  //String modifiedSentence;
-		 FileOutputStream fos = new FileOutputStream("out.bin");
+		// FileOutputStream fos = new FileOutputStream("out.bin");
 		 // BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
 		  Socket clientSocket = new Socket("192.168.1.10",7000);
+//	   	  Socket clientSocket = new Socket("127.0.0.1",7015);
 		  DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-		  BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		  InputStream in = clientSocket.getInputStream();
+		    DataInputStream dis = new DataInputStream(in);
+		  
+		  //BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		  System.out.println("Connected to server");
 		  
-		  char[] buf=new char[260048000];
+		//  char[] buf=new char[737280];
+		  byte[] byteBuf = new byte[NUMBER_OF_BYTES_PER_FRAME];
 		 // char[] buf=new char[129003048];
 		  
 		 // for(int i=0;i<20;i++){
-		  outToServer.writeByte(1);
-		  long totalBytes=0;
-		  int numberOfBytes=0;
+//		  outToServer.writeByte(1);
+		  long totalByteCount=0;
+		  int frameByteCount=0;
 		  int bytesRecived=0;
 		  int bytesRead=0;
-		  long startTime = System.nanoTime();    
+		  long startTime = System.nanoTime(); 
+		  
 		// ... the code being measured ...    
-		 // Dispay.showFrame();
-		  //Controller.start();
+
+		  Controller.start();
 		  Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-		  for(int i=0;i<100;i++){
-			  numberOfBytes=0;
+		  //get 1000 frames
+		  for(int i=0;i<NUMBER_OF_FRAMES;i++){
+			
+			  frameByteCount=0;
 			  bytesRecived=0;
 			  bytesRead=0;
-			
-			  while(numberOfBytes<2580480){	   
-				  outToServer.writeByte(1);
+			  //get single frame
+			  while(frameByteCount<NUMBER_OF_BYTES_PER_FRAME){	   
+				  outToServer.writeByte(i);
 				  bytesRecived=0;
-				  while( bytesRecived<61440){	
-	//				  if(numberOfBytes<258048000+61440){
-	//					  break;
-	//				  }
+				  //get single packet(24 ,lines)
+				  while( bytesRecived<NUMBER_OF_BYTES_PER_PACKET){	
+
 					  try{
-					  bytesRead= inFromServer.read(buf,numberOfBytes,61440); 
+		
+						  bytesRead=dis.read(byteBuf, frameByteCount,NUMBER_OF_BYTES_PER_PACKET);
+						  if(bytesRead<NUMBER_OF_BYTES_PER_PACKET){
+							  System.out.println("Partial Packet: "+bytesRead);
+						  }
 					  }
 					  catch(java.lang.IndexOutOfBoundsException e){
-						  System.out.println(numberOfBytes);
+						  System.out.println(frameByteCount+":"+e);
 						  break;
 					  }
 					  bytesRecived+=bytesRead;
-					  numberOfBytes+=bytesRead;
-					 // System.out.println(numberOfBytes);
+					  frameByteCount+=bytesRead;   
+					  
 				  }
-				  		  
+				   
 			  }
-			  totalBytes+=numberOfBytes;
-			 // long start = System.nanoTime();  
-			
-				 // FrameBuffer.addToBuffer(buf);
+			  totalByteCount+=frameByteCount;
+		
+			  FrameBuffer.addToBuffer(byteBuf);
 				
-			  
-			 // long time = System.nanoTime() - start;
-			  
-		//	  System.out.println("time: "+time+"ns");
-			
-//			  Viewer.updateFrame(buf);
+	
 		  }
 		  
 		  long estimatedTime = System.nanoTime() - startTime;
 		  
-		  System.out.println("frame received,fps:"+totalBytes/(1280*1024*2)/(estimatedTime/1000000000.0)+" time: "+estimatedTime/1000000+"ms");
-			 
-			 // System.out.println("FROM SERVER: " + modifiedSentence);
-		  //}
-		 // Viewer.updateFrame(buf);
-		  fos.write(new String(buf).getBytes());
-		  fos.close();
+		  System.out.println("frame received,fps:"+totalByteCount/(1280*240*2)/(estimatedTime/1000000000.0)+" time: "+estimatedTime/1000000+"ms");
+
 		  clientSocket.close();
 
 	}
