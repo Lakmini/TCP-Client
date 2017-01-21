@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 
 public class FileHandler {
-	public void convertToRGB(int width, int height, final File dir) {
+	public static void convertToRGB(int width, int height, final File dir) {
 
 		BufferedImage currentImage;
 		// final File dir = new File("input");
