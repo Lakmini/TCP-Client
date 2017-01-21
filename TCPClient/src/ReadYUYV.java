@@ -18,10 +18,11 @@ public class ReadYUYV {
 
 	}
 
-	public void startReading(byte[] rawDataa) {
+	public void startReading(String filename) {
 		try {
-			// Path path = Paths.get(filename);
-			byte[] rawData = rawDataa;
+
+			Path path = Paths.get(filename);
+			byte[] rawData = Files.readAllBytes(path);
 			oneFrameLength = (int) (width * height);
 			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 

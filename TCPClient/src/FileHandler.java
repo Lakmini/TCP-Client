@@ -1,42 +1,47 @@
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
 public class FileHandler {
-	public static void convertImages(byte[] rawData, int imageNumber) {
-		int width = 0;
-		int height = 0;
-		// height and width of the image frame ????
-		height = 200;
-		width = 1280;
+	public void convertToRGB(int width, int height, final File dir) {
+
 		BufferedImage currentImage;
-		// save images to "outputImages" folder
+		// final File dir = new File("input");
+		File[] list = dir.listFiles();
+		// System.out.println(list.length);
+		BufferedImage m;
 		new File("outputImages").mkdir();
-		ReadYUYV ryuv = new ReadYUYV(width, height);
-		ryuv.startReading(rawData);
-		currentImage = ryuv.getImage();
-		String path = "outputImages/" + imageNumber + ".bmp";
-		try {
+		for (int inc = 0; inc < list.length; inc++) {
+			String name = dir.getName() + "/" + list[inc].getName();
+			ReadYUYV ryuv = new ReadYUYV(width, height);
+			ryuv.startReading(name);
+			currentImage = ryuv.getImage();
+			String path = "outputImages/" + inc + ".gif";
+			try {
 
-			ImageIO.write(currentImage, "BMP", new File(path));
-		} catch (IOException e) {
+				ImageIO.write(currentImage, "GIF", new File(path));
+			} catch (IOException e) {
 
-			e.printStackTrace();
+				e.printStackTrace();
+			}
+
 		}
 
 	}
-	public static void writeFile(byte[] rawData, int imageNumber)
-	{
+
+	public static void writeFile(byte[] rawData, int imageNumber) {
 		new File("rowdataoutputImages").mkdir();
-		//long starttime;
-		//long time;
+		// long starttime;
+		// long time;
 		String path = "rowdataoutputImages/" + imageNumber + ".bin";
 		try {
-			//starttime=System.nanoTime();
-			Files.write(Paths.get(path),rawData);
-			//time=System.nanoTime()-starttime;
+			// starttime=System.nanoTime();
+			Files.write(Paths.get(path), rawData);
+			// time=System.nanoTime()-starttime;
 		} catch (IOException e) {
 
 			e.printStackTrace();
