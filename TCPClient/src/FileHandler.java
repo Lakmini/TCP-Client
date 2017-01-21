@@ -20,7 +20,7 @@ public class FileHandler {
 			ReadYUYV ryuv = new ReadYUYV(width, height);
 			ryuv.startReading(name);
 			currentImage = ryuv.getImage();
-			String path = "outputImages/" + inc + ".gif";
+			String path = "outputImages/" + list[inc].getName().split("[.]")[0]+".gif" ;
 			try {
 
 				ImageIO.write(currentImage, "GIF", new File(path));
@@ -33,11 +33,11 @@ public class FileHandler {
 
 	}
 
-	public static void writeFile(byte[] rawData, int imageNumber) {
+	public static void writeFile(byte[] rawData, String fileName) {
 		new File("rowdataoutputImages").mkdir();
 		// long starttime;
 		// long time;
-		String path = "rowdataoutputImages/" + imageNumber + ".bin";
+		String path = "rowdataoutputImages/" + fileName + ".bin";
 		try {
 			// starttime=System.nanoTime();
 			Files.write(Paths.get(path), rawData);

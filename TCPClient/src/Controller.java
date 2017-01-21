@@ -19,7 +19,8 @@ public class Controller {
 							 
 							//	FileHandler.convertImages(buf, imageNumber++);
 //							
-								FileHandler.writeFile(buf, imageNumber++);
+								FileHandler.writeFile(buf, new String("i"+imageNumber));
+								imageNumber++;
 													  
 							  }
 				//         }

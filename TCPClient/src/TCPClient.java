@@ -27,6 +27,7 @@ public class TCPClient {
 		  int bytesRead=0;
 		  long startTime = System.nanoTime(); 
 		  
+		  int frameNumber=0;
 		// ... the code being measured ...    
 
 		 // Controller.start();
@@ -40,6 +41,8 @@ public class TCPClient {
 			  //get single frame
 			  while(frameByteCount<NUMBER_OF_BYTES_PER_FRAME){	   
 				  outToServer.writeByte(i);
+				 // frameNumber = dis.readInt();
+				
 				  bytesRecived=0;
 				  //get single packet(24 ,lines)
 				  while( bytesRecived<NUMBER_OF_BYTES_PER_PACKET){	
@@ -62,7 +65,7 @@ public class TCPClient {
 				   
 			  }
 			  totalByteCount+=frameByteCount;
-			  FileHandler.writeFile(byteBuf,i);
+			  FileHandler.writeFile(byteBuf,new String(i+""));
 			//  FrameBuffer.addToBuffer(byteBuf);
 				
 	
