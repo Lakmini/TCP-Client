@@ -11,19 +11,19 @@ public class Controller {
 		timer.scheduleAtFixedRate(new TimerTask() {
 			  @Override
 			  public void run() {
-				  new Thread(new Runnable() {
-				         public void run(){
+				 // new Thread(new Runnable() {
+				  //       public void run(){
 							  byte[] buf = FrameBuffer.getFromBuffer();
 							  if(buf!=null){
 								  System.out.println(imageNumber);
 							 
-								FileHandler.convertImages(buf, imageNumber++);
+							//	FileHandler.convertImages(buf, imageNumber++);
 //							
-//								FileHandler.writeFile(buf, imageNumber++);
+								FileHandler.writeFile(buf, imageNumber++);
 													  
 							  }
-				         }
-				  }).start(); 
+				//         }
+				//  }).start(); 
 
 			  }
 			  

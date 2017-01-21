@@ -5,7 +5,7 @@ public class TCPClient {
 	final static int NUMBER_OF_BYTES_PER_LINE =  2560;
 	final static int NUMBER_OF_LINES_PER_FRAME =  240;
 	final static int NUMBER_OF_BYTES_PER_FRAME = NUMBER_OF_BYTES_PER_LINE*NUMBER_OF_LINES_PER_FRAME;
-	final static int NUMBER_OF_FRAMES =  1000;
+	final static int NUMBER_OF_FRAMES =  200;
 	
 	public static void main(String[] args) throws UnknownHostException, IOException {
 
@@ -18,7 +18,7 @@ public class TCPClient {
 		  
 		  System.out.println("Connected to server");
 		  
-		//  char[] buf=new char[737280];
+	
 		  byte[] byteBuf = new byte[NUMBER_OF_BYTES_PER_FRAME];
 
 		  long totalByteCount=0;
@@ -29,7 +29,7 @@ public class TCPClient {
 		  
 		// ... the code being measured ...    
 
-		  Controller.start();
+		 // Controller.start();
 		  Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 		  //get 1000 frames
 		  for(int i=0;i<NUMBER_OF_FRAMES;i++){
@@ -62,17 +62,23 @@ public class TCPClient {
 				   
 			  }
 			  totalByteCount+=frameByteCount;
-		
-			  FrameBuffer.addToBuffer(byteBuf);
+			  FileHandler.writeFile(byteBuf,i);
+			//  FrameBuffer.addToBuffer(byteBuf);
 				
 	
 		  }
+		  
+		 
 		  
 		  long estimatedTime = System.nanoTime() - startTime;
 		  
 		  System.out.println("frame received,fps:"+totalByteCount/(NUMBER_OF_BYTES_PER_FRAME)/(estimatedTime/1000000000.0)+" time: "+estimatedTime/1000000+"ms");
 
 		  clientSocket.close();
+		  
+		  FileHandler.convertToRGB(1280, NUMBER_OF_LINES_PER_FRAME, "rowdataoutputImages");
+		  
+		  System.out.println("Converting Succefull");
 
 	}
 

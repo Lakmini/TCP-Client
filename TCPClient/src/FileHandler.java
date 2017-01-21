@@ -7,10 +7,10 @@ import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 
 public class FileHandler {
-	public static void convertToRGB(int width, int height, final File dir) {
+	public static void convertToRGB(int width, int height, String folder) {
 
 		BufferedImage currentImage;
-		// final File dir = new File("input");
+	     final File dir = new File(folder);
 		File[] list = dir.listFiles();
 		// System.out.println(list.length);
 		BufferedImage m;
