@@ -5,7 +5,7 @@ public class TCPClient {
 	final static int NUMBER_OF_BYTES_PER_LINE =  2560;
 	final static int NUMBER_OF_LINES_PER_FRAME =  240;
 	final static int NUMBER_OF_BYTES_PER_FRAME = NUMBER_OF_BYTES_PER_LINE*NUMBER_OF_LINES_PER_FRAME;
-	final static int NUMBER_OF_FRAMES =  400;
+	final static int NUMBER_OF_FRAMES =  100;
 	
 	public static void main(String[] args) throws UnknownHostException, IOException {
 
@@ -21,7 +21,7 @@ public class TCPClient {
 	
 		  byte[] byteBuf = new byte[NUMBER_OF_BYTES_PER_FRAME];
 
-		  long totalByteCount=0;
+		  
 		  int frameByteCount=0;
 		  int bytesRecived=0;
 		  int bytesRead=0;
@@ -38,6 +38,7 @@ public class TCPClient {
 			  frameByteCount=0;
 			  bytesRecived=0;
 			  bytesRead=0;
+			  
 			  //get single frame
 			  while(frameByteCount<NUMBER_OF_BYTES_PER_FRAME){	   
 				  outToServer.writeByte(i);
@@ -48,11 +49,12 @@ public class TCPClient {
 				  while( bytesRecived<NUMBER_OF_BYTES_PER_PACKET){	
 
 					  try{
-		
+						 
 						  bytesRead=dis.read(byteBuf, frameByteCount,NUMBER_OF_BYTES_PER_PACKET);
 						  if(bytesRead<NUMBER_OF_BYTES_PER_PACKET){
 							  System.out.println("Partial Packet: "+bytesRead);
 						  }
+						 
 					  }
 					  catch(java.lang.IndexOutOfBoundsException e){
 						  System.out.println(frameByteCount+":"+e);
@@ -64,7 +66,7 @@ public class TCPClient {
 				  }
 				   
 			  }
-			  totalByteCount+=frameByteCount;
+			//  totalByteCount+=frameByteCount;
 			 // FileHandler.writeFile(byteBuf,new String(i+""));
 			  FrameBuffer.addToBuffer(byteBuf);
 				
