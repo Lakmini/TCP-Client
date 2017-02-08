@@ -30,6 +30,6 @@ public class Controller {
 
 			  }
 			  
-			}, 5, 16);
+			}, 5, 8);
 	}
 }

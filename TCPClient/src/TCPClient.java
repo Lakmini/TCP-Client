@@ -1,12 +1,13 @@
 import java.io.*;
 import java.net.*;
+import java.util.Timer;
 public class TCPClient {
 	final static int NUMBER_OF_BYTES_PER_PACKET =  61440;
 	final static int NUMBER_OF_BYTES_PER_LINE =  2560;
 	final static int NUMBER_OF_LINES_PER_FRAME =  240;
 	final static int NUMBER_OF_BYTES_PER_FRAME = NUMBER_OF_BYTES_PER_LINE*NUMBER_OF_LINES_PER_FRAME;
-	final static int NUMBER_OF_FRAMES =  100;
-	
+	final static int NUMBER_OF_FRAMES =  500;
+	private static Timer timer = new Timer();
 	public static void main(String[] args) throws UnknownHostException, IOException {
 
 		  Socket clientSocket = new Socket("192.168.1.10",7000);
@@ -34,32 +35,33 @@ public class TCPClient {
 		  Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 		  //get 1000 frames
 		  for(int i=0;i<NUMBER_OF_FRAMES;i++){
-			
+			 // long start = System.nanoTime(); 
 			  frameByteCount=0;
 			  bytesRecived=0;
 			  bytesRead=0;
 			  
 			  //get single frame
 			  while(frameByteCount<NUMBER_OF_BYTES_PER_FRAME){	   
-				  outToServer.writeByte(i);
+				  outToServer.writeByte(0);
 				 // frameNumber = dis.readInt();
 				
 				  bytesRecived=0;
 				  //get single packet(24 ,lines)
 				  while( bytesRecived<NUMBER_OF_BYTES_PER_PACKET){	
 
-					  try{
+					//  try{
 						 
 						  bytesRead=dis.read(byteBuf, frameByteCount,NUMBER_OF_BYTES_PER_PACKET);
-						  if(bytesRead<NUMBER_OF_BYTES_PER_PACKET){
-							  System.out.println("Partial Packet: "+bytesRead);
-						  }
+//						  if(bytesRead<NUMBER_OF_BYTES_PER_PACKET){
+//							  System.out.println("Partial Packet: "+bytesRead);
+//						  }
 						 
-					  }
-					  catch(java.lang.IndexOutOfBoundsException e){
-						  System.out.println(frameByteCount+":"+e);
-						  break;
-					  }
+//					  }
+//					  catch(java.lang.IndexOutOfBoundsException e){
+//						  System.out.println(frameByteCount+":"+e);
+//						  frameByteCount=0;
+//						  break;
+//					  }
 					  bytesRecived+=bytesRead;
 					  frameByteCount+=bytesRead;   
 					  
@@ -69,8 +71,9 @@ public class TCPClient {
 			//  totalByteCount+=frameByteCount;
 			 // FileHandler.writeFile(byteBuf,new String(i+""));
 			  FrameBuffer.addToBuffer(byteBuf);
-				
-	
+//			  long time = System.nanoTime() - start;
+//			  System.out.println(" time: "+time/1000000+"ms");
+
 		  }
 		  
 		 
@@ -79,9 +82,10 @@ public class TCPClient {
 		  
 		  System.out.println("frame received,fps:"+NUMBER_OF_FRAMES/(estimatedTime/1000000000.0)+" time: "+estimatedTime/1000000+"ms");
 
-		  clientSocket.close();
+		  
 		  
 		  FileHandler.convertToRGB(1280, NUMBER_OF_LINES_PER_FRAME, "rowdataoutputImages");
+		  clientSocket.close();
 		  
 		  System.out.println("Converting Succefull");
 
