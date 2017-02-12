@@ -283,38 +283,21 @@ autoThresholdingButton.addActionListener(new ActionListener() {
 				labelRedValue.setText("Red : " + slider.getValue());
 				if (!slider.getValueIsAdjusting()) {
 					redValue = slider.getValue();
-					System.out.println(redValue);
-					try {
-						com.Sortex.controller.TCPClient.sendParameters(redValue, greenValue, blueValue);
-						//
-					} catch (UnknownHostException e1) {
-						
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						
-						e1.printStackTrace();
-					}
+					
 					
 				}
 
 			} else if (slider == sliderG) {
 				labelGreenValue.setText("Green : " + slider.getValue());
-				if (!slider.getValueIsAdjusting()) {
-					greenValue = slider.getValue();
-					try {
-						com.Sortex.controller.TCPClient.sendParameters(redValue, greenValue, blueValue);
-						//com.Sortex.controller.TCPClient.train();
-					} catch (UnknownHostException e1) {
-						
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						
-						e1.printStackTrace();
-					}
-				}
+				greenValue = slider.getValue();
+				
 				// greenValue=slider.getValue();
 			} else if (slider == sliderB) {
 				labelBlueValue.setText("Blue : " + slider.getValue());
+				blueValue = slider.getValue();
+			}
+				
+				
 				try {
 					com.Sortex.controller.TCPClient.sendParameters(redValue, greenValue, blueValue);
 					//com.Sortex.controller.TCPClient.train();
@@ -325,11 +308,8 @@ autoThresholdingButton.addActionListener(new ActionListener() {
 					
 					e1.printStackTrace();
 				}
-				if (!slider.getValueIsAdjusting()) {
-					blueValue = slider.getValue();
-				}
-				// blueValue=slider.getValue();
-			}
+				
+			
 
 		}
 

@@ -1,4 +1,4 @@
-package com.Sortex.controller;
+//package com.Sortex.controller;
 
 import java.io.*;
 import java.net.*;
@@ -31,13 +31,13 @@ public class TCPClient {
 		buildServerConnection();
 		
 		byte [] paramBuffer=new byte[4];
-		paramBuffer[0]=toByte(HEADER_VALUE2);
-		paramBuffer[1]=toByte(param1) ;
-		paramBuffer[2]=toByte(param2);
-		paramBuffer[3]=toByte(param3);
+		paramBuffer[3]=toByte(HEADER_VALUE2);
+		paramBuffer[2]=toByte(param1) ;
+		paramBuffer[1]=toByte(param2);
+		paramBuffer[0]=toByte(param3);
 		
 		outToServer.write(paramBuffer);
-		byte successMessage=dis.readByte();
+		//byte successMessage=dis.readByte();
 		//System.out.println("Success Message : "+successMessage);
 		clientSocket.close();
 		
@@ -47,13 +47,13 @@ public class TCPClient {
 		buildServerConnection();
 		
 		byte [] paramBuffer=new byte[4];
-		paramBuffer[0]=toByte(HEADER_VALUE1);
-		paramBuffer[1]=toByte(_R) ;
-		paramBuffer[2]=toByte(_G);
-		paramBuffer[3]=toByte(_B);
+		paramBuffer[3]=toByte(HEADER_VALUE1);
+		paramBuffer[2]=toByte(_R) ;
+		paramBuffer[1]=toByte(_G);
+		paramBuffer[0]=toByte(_B);
 		
 		outToServer.write(paramBuffer);
-		byte successMessage=dis.readByte();
+		//byte successMessage=dis.readByte();
 		//System.out.println("Success Message : "+successMessage);
 		clientSocket.close();
 		

@@ -10,32 +10,50 @@ public class TCPClient {
 	final static int NUMBER_OF_LINES_PER_FRAME = 240;
 	final static int NUMBER_OF_BYTES_PER_FRAME = NUMBER_OF_BYTES_PER_LINE * NUMBER_OF_LINES_PER_FRAME;
 	final static int NUMBER_OF_FRAMES = 500;
+	final static int HEADER_VALUE1=192;
+	final static int HEADER_VALUE2=64;
 	private static Timer timer = new Timer();
 	static Socket clientSocket;
 	static DataOutputStream outToServer;
 	static InputStream in;
 	static DataInputStream dis;
+	
+	
 
 	public static void buildServerConnection() throws UnknownHostException, IOException {
 		clientSocket = new Socket("192.168.1.10", 7000);
-		// Socket clientSocket = new Socket("127.0.0.1",7015);
 		outToServer = new DataOutputStream(clientSocket.getOutputStream());
 		in = clientSocket.getInputStream();
 		dis = new DataInputStream(in);
 		System.out.println("Connected to server");
 	}
+	public static void sendTestParameters(int param1, int param2, int param3) throws UnknownHostException, IOException {
+		buildServerConnection();
+		
+		byte [] paramBuffer=new byte[4];
+		paramBuffer[3]=toByte(HEADER_VALUE2);
+		paramBuffer[2]=toByte(param1) ;
+		paramBuffer[1]=toByte(param2);
+		paramBuffer[0]=toByte(param3);
+		
+		outToServer.write(paramBuffer);
+		//byte successMessage=dis.readByte();
+		//System.out.println("Success Message : "+successMessage);
+		clientSocket.close();
+		
 
+	}
 	public static void sendParameters(int _R, int _G, int _B) throws UnknownHostException, IOException {
 		buildServerConnection();
 		
 		byte [] paramBuffer=new byte[4];
-		
-		paramBuffer[0]=toByte(_R) ;
+		paramBuffer[3]=toByte(HEADER_VALUE1);
+		paramBuffer[2]=toByte(_R) ;
 		paramBuffer[1]=toByte(_G);
-		paramBuffer[2]=toByte(_B);
-		paramBuffer[3]=1;
+		paramBuffer[0]=toByte(_B);
+		
 		outToServer.write(paramBuffer);
-		//char successMessage=dis.readChar();
+		//byte successMessage=dis.readByte();
 		//System.out.println("Success Message : "+successMessage);
 		clientSocket.close();
 		
@@ -49,6 +67,12 @@ public class TCPClient {
 	// note :main method changed as train()
 	public static void train() throws UnknownHostException, IOException {
 		buildServerConnection();
+		byte[] _32bitframe = new byte[4];
+		for (byte b1 : _32bitframe) {
+			b1=0;
+			
+		}
+		
 
 		byte[] byteBuf = new byte[NUMBER_OF_BYTES_PER_FRAME];
 
@@ -70,7 +94,7 @@ public class TCPClient {
 
 			// get single frame
 			while (frameByteCount < NUMBER_OF_BYTES_PER_FRAME) {
-				outToServer.writeByte(0);
+				outToServer.write(_32bitframe);
 				// frameNumber = dis.readInt();
 
 				bytesRecived = 0;
