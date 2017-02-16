@@ -13,13 +13,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UIManager.*;
 
-public class Window1 extends JFrame {
+public class Window1 {
 
 	JFrame frame;
 	Window2 window2;
@@ -30,10 +31,13 @@ public class Window1 extends JFrame {
 	JButton backButton;
 	Window3 window3;
 	JPanel panel4;
+	JTabbedPane jtp;
 
 	public void init() {
 		frame = new JFrame("Sorter");
 		frame.setResizable(false);
+		jtp = new JTabbedPane();
+		frame.getContentPane().add(jtp);
 		window2 = new Window2();
 		panel = new JPanel();
 		panel.setBackground(Color.white);
@@ -65,89 +69,14 @@ public class Window1 extends JFrame {
 	}
 
 	public void makeUI() {
-
-		// Setting the width and height of frame
-		frame.setSize(700, 700);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		// adding panel to frame
-		frame.add(container);
-		/*
-		 * calling user defined method for adding components to the panel.
-		 */
-		placeComponents();
-
-		// Setting the frame visibility to true
-		frame.setVisible(true);
-	}
-
-	public void placeComponents() {
-
-		container.setLayout(new GridBagLayout());
-		// Creating login button
-		panel.setLayout(new GridBagLayout());
-		panel.setBackground(Color.white);
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(6, 6, 6, 6);
-		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		JButton trainButton = new JButton("Train");
-		trainButton.setBounds(50, 80, 200, 200);
-		panel.add(trainButton);
-		JButton testButton = new JButton("Test");
-		testButton.setBounds(300, 80, 200, 200);
-		panel.add(testButton);
-		backButton = new JButton("Back");
-		panel3.add(backButton);
-		container.add(panel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1, GridBagConstraints.WEST,
-				GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-		trainButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				container.remove(panel);
-				panel2 = window2.init();
-				container.add(panel2, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.8, GridBagConstraints.WEST,
-						GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-				container.add(panel3, new GridBagConstraints(0, 1, 3, 1, 1.0, 0.2, GridBagConstraints.WEST,
-						GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-				// container.add(panel2);
-				// container.add(panel3);
-				container.revalidate();
-				container.repaint();
-			}
-		});
-
-		backButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				container.removeAll();
-				container.add(panel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1, GridBagConstraints.WEST,
-						GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-				container.revalidate();
-				container.repaint();
-
-			}
-		});
-
+		panel2 = window2.init();
 		panel4 = window3.createTestPanel();
-		testButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				container.remove(panel);
-				container.add(panel4, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.8, GridBagConstraints.WEST,
-						GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-				container.add(panel3, new GridBagConstraints(0, 1, 3, 1, 1.0, 0.2, GridBagConstraints.WEST,
-						GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-				container.revalidate();
-				container.repaint();
-
-			}
-		});
-
+		// Setting the width and height of frame
+		frame.setSize(600, 600);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jtp.addTab("Auto Thresholding", panel4);
+		jtp.addTab("Manual Thresholding", panel2);
+		frame.setVisible(true);
 	}
 
 }
