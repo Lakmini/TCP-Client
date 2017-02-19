@@ -14,11 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import javax.swing.UIManager;
-import javax.swing.UIManager.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -34,7 +31,8 @@ public class Window1 {
 	Window3 window3;
 	JPanel panel4;
 	JTabbedPane jtp;
-	int selectedIndex=0;
+	int selectedIndex = 0;
+
 	public void init() {
 		frame = new JFrame("Sorter");
 		frame.setResizable(false);
@@ -42,24 +40,19 @@ public class Window1 {
 		frame.getContentPane().add(jtp);
 		window2 = new Window2();
 		panel = new JPanel();
-		panel.setBackground(Color.white);
+		panel.setBackground(Color.DARK_GRAY);
 		container = new JPanel();
 		panel3 = new JPanel();
-		panel3.setBackground(Color.white);
+		panel3.setBackground(Color.cyan);
 		window3 = new Window3();
 	}
 
 	public static void main(String[] args) {
 		try {
-			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
+			UIManager.setLookAndFeel("com.jtattoo.plaf.noire.NoireLookAndFeel");
+
 		} catch (Exception e) {
-			// If Nimbus is not available, you can set the GUI to another look
-			// and feel.
+			e.printStackTrace();
 		}
 		Window1 window = new Window1();
 		window.init();
@@ -71,26 +64,31 @@ public class Window1 {
 	}
 
 	public void makeUI() {
-		
+
 		panel2 = window2.init();
 		panel4 = window3.createTestPanel();
-		// Setting the width and height of frame
 		frame.setSize(600, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jtp.addTab("Auto Thresholding", panel4);
 		jtp.addTab("Manual Thresholding", panel2);
 		frame.setVisible(true);
 		jtp.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				selectedIndex = jtp.getSelectedIndex();
 				System.out.println("You are in tab : " + selectedIndex);
-				
+
+				if (selectedIndex == 0) {
+					// monitor off : Auto Thresholding tab
+				}
+				if (selectedIndex == 1) {
+					// monitor on : manual thresholding tab
+				}
+
 			}
 		});
-		
-		
+
 	}
 
 }

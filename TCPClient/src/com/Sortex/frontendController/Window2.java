@@ -1,39 +1,25 @@
 package com.Sortex.frontendController;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSlider;
-import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.Sortex.controller.*;
+public class Window2 {
 
-public class Window2  {
-
-	
 	JPanel panel3;
 	JPanel panel4;
 	JPanel panel5;
@@ -67,7 +53,7 @@ public class Window2  {
 	String category;
 
 	public JPanel init() {
-		
+
 		sliderR = getSlider(0, 255, 0, 50, 5);
 		sliderG = getSlider(0, 255, 0, 50, 5);
 		sliderB = getSlider(0, 255, 0, 50, 5);
@@ -77,26 +63,21 @@ public class Window2  {
 		container = new JPanel();
 		container.setLayout(new GridBagLayout());
 
-		container.setBackground(Color.white);
-
 		/**********************
 		 * panel 3
 		 **************************************************/
 		panel3 = new JPanel(new GridBagLayout());
-		panel3.setBackground(Color.white);
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(6, 6, 6, 6);
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 		gbc.fill = GridBagConstraints.VERTICAL;
 
-		JButton trainButton = new JButton("Manual Thresholding");
 		resetButton = new JButton("Reset");
 		autoThresholdingButton = new JButton("Auto Thresholding");
 		panel3.add(resetButton);
 		/*********************************** panel4 ******************/
 
 		panel4 = new JPanel();
-		panel4.setBackground(Color.white);
 		panel4.setLayout(new GridBagLayout());
 		panel4.setBorder(BorderFactory.createEtchedBorder());
 		TitledBorder border4 = new TitledBorder("Stem/Leaf Thresholding");
@@ -127,7 +108,6 @@ public class Window2  {
 		/************************* Panel 5 ******************************/
 
 		panel5 = new JPanel();
-		panel5.setBackground(Color.white);
 		panel5.setLayout(new GridBagLayout());
 		panel5.setBorder(BorderFactory.createEtchedBorder());
 		TitledBorder border3 = new TitledBorder("Background Thresholding");
@@ -155,7 +135,7 @@ public class Window2  {
 		panel5.add(labelBlueValue, new GridBagConstraints(2, 3, 1, 1, 0.5, 0.1, GridBagConstraints.WEST,
 				GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
 		/*****************************************************************************************/
-		
+
 		resetButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -232,7 +212,7 @@ public class Window2  {
 
 			try {
 				com.Sortex.controller.TCPClient.sendParameters(redValue, greenValue, blueValue);
-				
+
 			} catch (UnknownHostException e1) {
 
 				e1.printStackTrace();

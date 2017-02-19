@@ -1,28 +1,20 @@
 package com.Sortex.frontendController;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -32,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
@@ -60,18 +51,18 @@ public class Window3 {
 	public JPanel createTestPanel() {
 		container = new JPanel();
 		container.setLayout(new GridBagLayout());
-		container.setBackground(Color.white);
+
 		/***************************
 		 * Panel 1
 		 **************************************/
 		panel1 = new JPanel(new BorderLayout());
-		panel1.setBackground(Color.white);
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
 		panel1.setBorder(BorderFactory.createEtchedBorder());
 		TitledBorder border = new TitledBorder("Select Type");
 		border.setTitleJustification(TitledBorder.LEFT);
 		border.setTitlePosition(TitledBorder.TOP);
 		panel1.setBorder(border);
+
 		// add radio buttons
 		JRadioButton stem = new JRadioButton("Stem");
 		JRadioButton leaf = new JRadioButton("Leaf");
@@ -106,7 +97,6 @@ public class Window3 {
 		 ***********************************/
 		panel2 = new JPanel();
 		panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
-		panel2.setBackground(Color.white);
 		panel2.setBorder(BorderFactory.createEtchedBorder());
 		TitledBorder border2 = new TitledBorder("Select Tea Category");
 		border2.setTitleJustification(TitledBorder.LEFT);
@@ -140,8 +130,6 @@ public class Window3 {
 		});
 		/****************************************** panel3 ******************/
 		panel3 = new JPanel(new BorderLayout(10, 10));
-		panel3.setBackground(Color.white);
-
 		startButton = new JButton("Start");
 		resetButton = new JButton("Reset");
 		final JTextField userText = new JTextField();
@@ -166,13 +154,11 @@ public class Window3 {
 
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				
 
 			}
 
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				
 
 			}
 
@@ -180,12 +166,9 @@ public class Window3 {
 		;
 
 		JPanel inputLabels = new JPanel();
-		inputLabels.setBackground(Color.WHITE);
 		JPanel inputField = new JPanel();
-		inputField.setBackground(Color.WHITE);
 		JPanel controlinputs = new JPanel(new BorderLayout());
 		JPanel controls = new JPanel();
-		controls.setBackground(Color.WHITE);
 		controls.add(startButton);
 		controls.add(resetButton);
 		inputLabels.add(noOfFrames);
@@ -220,61 +203,63 @@ public class Window3 {
 		 * panel 4
 		 ***************************************/
 		panel4 = new JPanel(new BorderLayout());
-		panel4.setBackground(Color.white);
 		ImageIcon loadingIcon = new ImageIcon(this.getClass().getResource("/com/Sortex/images/loader1.gif"));
 		Image image = loadingIcon.getImage(); // transform it
-		Image newimg = image.getScaledInstance(600, 20, Image.SCALE_FAST); 
+		Image newimg = image.getScaledInstance(600, 20, Image.SCALE_FAST);
 		loadingIcon = new ImageIcon(newimg); // transform it back
 		imgLabel = new JLabel(loadingIcon);
 		panel4.add(controls, BorderLayout.CENTER);
 
 		/******************** panel 5 ***************************************/
 		panel5 = new JPanel(new BorderLayout());
-		panel5.setBackground(Color.white);
 		ImageIcon logoIcon = new ImageIcon(this.getClass().getResource("/com/Sortex/images/SORTEX.png"));
 		Image image2 = logoIcon.getImage(); // transform it
-		Image newimg2 = image2.getScaledInstance(150, 100, Image.SCALE_FAST);
+		Image newimg2 = image2.getScaledInstance(200, 150, Image.SCALE_FAST);
 		logoIcon = new ImageIcon(newimg2);
 		JLabel logo = new JLabel(logoIcon);
 		panel5.add(logo, BorderLayout.EAST);
 		/************************** temp panel ********************/
 		JPanel tempPanel = new JPanel();
-		tempPanel.setBackground(Color.WHITE);
-
 		startButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//System.out.println(userText.getText()+"000000000000");
-				if(userText.getText().isEmpty() &&  bG.getSelection()==null && bG2.getSelection()== null)
-				{
+
+				if (userText.getText().isEmpty() || bG.getSelection() == null || bG2.getSelection() == null) {
+
 					JOptionPane.showMessageDialog(null, "Please Fill all the details");
+				} else {
+					try {
+						com.Sortex.controller.TCPClient.train();
+					} catch (UnknownHostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Thread thread = new Thread() {
+						public void run() {
+
+							panel5.add(imgLabel, BorderLayout.PAGE_START);
+							panel5.validate();
+							panel5.repaint();
+
+						}
+					};
+					thread.start();
+
+					if (com.Sortex.controller.TCPClient.status) {
+
+						panel5.remove(imgLabel);
+						panel5.validate();
+						panel5.repaint();
+						thread.interrupt();
+						// runexe();
+
+					}
+
 				}
-				else
-				{
-					   try {
-					com.Sortex.controller.TCPClient.train();
-				} catch (UnknownHostException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				panel5.add(imgLabel, BorderLayout.PAGE_START);
-				panel5.validate();
-				panel5.repaint();
-				if(com.Sortex.controller.TCPClient.status)
-				{
-					panel5.remove(imgLabel);
-					panel5.validate();
-					panel5.repaint();
-					runexe();
-					
-				}
-				
-				}
-			 
 
 			}
 		});
@@ -291,22 +276,20 @@ public class Window3 {
 				new Insets(2, 2, 2, 2), 0, 0));
 		return container;
 	}
-	
-public void runexe()
-{
-	String commandline = "E:\\Semester8\\fyp\\Sorter\\Sorter\\for_testing\\Sorter.exe";
-	try {
-	    String line;
-	    Process p = Runtime.getRuntime().exec(commandline);
-	    BufferedReader input = new BufferedReader
-	    (new InputStreamReader(p.getInputStream()));
-	    while ((line = input.readLine()) != null) {
-	        System.out.println(line);
-	    }
-	    input.close();
-	} catch (Exception err) {
-	    err.printStackTrace();
+
+	public void runexe() {
+		String commandline = "E:\\Semester8\\fyp\\Sorter\\Sorter\\for_testing\\Sorter.exe";
+		try {
+			String line;
+			Process p = Runtime.getRuntime().exec(commandline);
+			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			while ((line = input.readLine()) != null) {
+				System.out.println(line);
+			}
+			input.close();
+		} catch (Exception err) {
+			err.printStackTrace();
+		}
 	}
-}
 
 }
