@@ -232,7 +232,7 @@ public class Window2  {
 
 			try {
 				com.Sortex.controller.TCPClient.sendParameters(redValue, greenValue, blueValue);
-				// com.Sortex.controller.TCPClient.train();
+				
 			} catch (UnknownHostException e1) {
 
 				e1.printStackTrace();

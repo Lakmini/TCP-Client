@@ -19,6 +19,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UIManager.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class Window1 {
 
@@ -32,7 +34,7 @@ public class Window1 {
 	Window3 window3;
 	JPanel panel4;
 	JTabbedPane jtp;
-
+	int selectedIndex=0;
 	public void init() {
 		frame = new JFrame("Sorter");
 		frame.setResizable(false);
@@ -69,6 +71,7 @@ public class Window1 {
 	}
 
 	public void makeUI() {
+		
 		panel2 = window2.init();
 		panel4 = window3.createTestPanel();
 		// Setting the width and height of frame
@@ -77,6 +80,17 @@ public class Window1 {
 		jtp.addTab("Auto Thresholding", panel4);
 		jtp.addTab("Manual Thresholding", panel2);
 		frame.setVisible(true);
+		jtp.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				selectedIndex = jtp.getSelectedIndex();
+				System.out.println("You are in tab : " + selectedIndex);
+				
+			}
+		});
+		
+		
 	}
 
 }

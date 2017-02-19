@@ -17,7 +17,7 @@ public class TCPClient {
 	static DataOutputStream outToServer;
 	static InputStream in;
 	static DataInputStream dis;
-	
+	public static boolean status = false;
 	
 
 	public static void buildServerConnection() throws UnknownHostException, IOException {
@@ -137,7 +137,7 @@ public class TCPClient {
 		clientSocket.close();
 
 		System.out.println("Converting Succefull");
-
+        status =true;
 	}
 
 }

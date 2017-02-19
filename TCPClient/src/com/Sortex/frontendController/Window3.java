@@ -16,8 +16,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.UnknownHostException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -26,6 +29,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
@@ -241,10 +245,36 @@ public class Window3 {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// send parameters type category , number of frames
+				//System.out.println(userText.getText()+"000000000000");
+				if(userText.getText().isEmpty() &&  bG.getSelection()==null && bG2.getSelection()== null)
+				{
+					JOptionPane.showMessageDialog(null, "Please Fill all the details");
+				}
+				else
+				{
+					   try {
+					com.Sortex.controller.TCPClient.train();
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				panel5.add(imgLabel, BorderLayout.PAGE_START);
 				panel5.validate();
 				panel5.repaint();
+				if(com.Sortex.controller.TCPClient.status)
+				{
+					panel5.remove(imgLabel);
+					panel5.validate();
+					panel5.repaint();
+					runexe();
+					
+				}
+				
+				}
+			 
 
 			}
 		});
@@ -261,5 +291,22 @@ public class Window3 {
 				new Insets(2, 2, 2, 2), 0, 0));
 		return container;
 	}
+	
+public void runexe()
+{
+	String commandline = "E:\\Semester8\\fyp\\Sorter\\Sorter\\for_testing\\Sorter.exe";
+	try {
+	    String line;
+	    Process p = Runtime.getRuntime().exec(commandline);
+	    BufferedReader input = new BufferedReader
+	    (new InputStreamReader(p.getInputStream()));
+	    while ((line = input.readLine()) != null) {
+	        System.out.println(line);
+	    }
+	    input.close();
+	} catch (Exception err) {
+	    err.printStackTrace();
+	}
+}
 
 }
