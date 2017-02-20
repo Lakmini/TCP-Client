@@ -6,8 +6,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,12 +32,16 @@ public class Window1 {
 	JPanel panel4;
 	JTabbedPane jtp;
 	int selectedIndex = 0;
+	JPanel mainPanel;
 
 	public void init() {
+		mainPanel = new JPanel();
 		frame = new JFrame("Sorter");
 		frame.setResizable(false);
 		jtp = new JTabbedPane();
+		//mainPanel.add(jtp);
 		frame.getContentPane().add(jtp);
+		//frame.add(mainPanel);
 		window2 = new Window2();
 		panel = new JPanel();
 		panel.setBackground(Color.DARK_GRAY);
@@ -82,21 +84,10 @@ public class Window1 {
 				System.out.println("You are in tab : " + selectedIndex);
 
 				if (selectedIndex == 0) {
-					try {
-						com.Sortex.controller.TCPClient.controlMonitor(0);
-					} catch (IOException e1) {
-						JOptionPane.showMessageDialog(null, "Please Check the Connection");
-						//e1.printStackTrace();
-					}
+					// monitor off : Auto Thresholding tab
 				}
 				if (selectedIndex == 1) {
-					try {
-						com.Sortex.controller.TCPClient.controlMonitor(1);
-					
-					} catch (IOException e1) {
-						
-						JOptionPane.showMessageDialog(null, "Please Check the Connection");
-					}
+					// monitor on : manual thresholding tab
 				}
 
 			}

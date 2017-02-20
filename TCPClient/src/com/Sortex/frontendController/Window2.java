@@ -42,6 +42,8 @@ public class Window2 {
 	JLabel labelGreenValueX = new JLabel("Green: 0");
 	JLabel labelBlueValueX = new JLabel("Blue: 0");
 	JButton autoThresholdingButton;
+	JSlider sensitivitySlider;
+	JLabel sensitivity = new JLabel("Sensitivity");
 	// parameters
 	int redValue;
 	int greenValue;
@@ -60,6 +62,7 @@ public class Window2 {
 		sliderRX = getSlider(0, 255, 0, 50, 5);
 		sliderGX = getSlider(0, 255, 0, 50, 5);
 		sliderBX = getSlider(0, 255, 0, 50, 5);
+		sensitivitySlider = getSlider(0, 255, 0, 50, 5);
 		container = new JPanel();
 		container.setLayout(new GridBagLayout());
 
@@ -74,7 +77,22 @@ public class Window2 {
 
 		resetButton = new JButton("Reset");
 		autoThresholdingButton = new JButton("Auto Thresholding");
-		panel3.add(resetButton);
+		//panel3.add(resetButton);
+		panel3.add(sensitivity, new GridBagConstraints(0, 0, 1, 1, 0.2,0.1, GridBagConstraints.WEST,
+				GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+		panel3.add(sensitivitySlider, new GridBagConstraints(1, 0, 2, 1, 0.5, 0.1, GridBagConstraints.WEST,
+				GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+		panel3.add(resetButton, new GridBagConstraints(0, 1, 1, 1, 0.2, 0.1, GridBagConstraints.WEST,
+			GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+		sensitivitySlider.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				///////send parms
+				
+			}
+		});
+		
 		/*********************************** panel4 ******************/
 
 		panel4 = new JPanel();
@@ -146,6 +164,7 @@ public class Window2 {
 				sliderRX.setValue(0);
 				sliderGX.setValue(0);
 				sliderBX.setValue(0);
+				sensitivitySlider.setValue(0);
 				type = null;
 				category = null;
 

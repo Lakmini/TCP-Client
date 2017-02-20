@@ -12,6 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
@@ -25,8 +27,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class Window3 {
 	JPanel container;
@@ -42,6 +47,11 @@ public class Window3 {
 	JButton resetButton;
 	int numberOfFrames;
 	JButton autoThresholdingButton;
+	JSlider sensitivitySlider;
+	JLabel sensitivity = new JLabel("Sensitivity");
+	JButton statistics = new JButton("Statistics");
+	JButton result = new JButton("Result");
+	
 	// parameters
 	int redValue;
 	int greenValue;
@@ -135,6 +145,7 @@ public class Window3 {
 		resetButton = new JButton("Reset");
 		final JTextField userText = new JTextField();
 		userText.setPreferredSize(new Dimension(60, 25));
+		userText.setText("");
 		JLabel noOfFrames = new JLabel("Number of Frames :");
 		userText.addKeyListener(new KeyListener() {
 
@@ -170,6 +181,8 @@ public class Window3 {
 		JPanel controls = new JPanel();
 		controls.add(startButton);
 		controls.add(resetButton);
+		controls.add(statistics);
+		controls.add(result);
 		inputLabels.add(noOfFrames);
 		inputField.add(userText);
 		controlinputs.add(inputLabels, BorderLayout.WEST);
@@ -190,8 +203,8 @@ public class Window3 {
 				panel5.remove(imgLabel);
 				panel5.validate();
 				panel5.repaint();
-				userText.setText(" ");
-
+				userText.setText("");
+				sensitivitySlider.setValue(0);
 				type = null;
 				category = null;
 				cleanDirectory("../TCPClient/stemRowData");
@@ -202,6 +215,22 @@ public class Window3 {
 				cleanDirectory("../TCPClient/testInLeaf");
 				
 
+			}
+		});
+		statistics.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		result.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 
@@ -224,10 +253,36 @@ public class Window3 {
 		logoIcon = new ImageIcon(newimg2);
 		JLabel logo = new JLabel(logoIcon);
 		panel5.add(logo, BorderLayout.EAST);
+		
 		/************************** temp panel ********************/
+		sensitivitySlider = getSlider(0, 255, 0, 50, 5);
 		JPanel tempPanel = new JPanel();
-		startButton.addActionListener(new ActionListener() {
+		tempPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(6, 6, 6, 6);
+		gbc.gridwidth = GridBagConstraints.REMAINDER;
+		gbc.fill = GridBagConstraints.VERTICAL;
+		
+		
+		
 
+		
+		
+		tempPanel.add(sensitivity, new GridBagConstraints(0, 0, 1, 1, 0.2,0.1, GridBagConstraints.WEST,
+				GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+		tempPanel.add(sensitivitySlider, new GridBagConstraints(1, 0, 2, 1, 0.5, 0.1, GridBagConstraints.WEST,
+				GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+		sensitivitySlider.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		startButton.addActionListener(new ActionListener() {
+			Thread thread2;
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String temp = userText.getText();
@@ -252,34 +307,78 @@ public class Window3 {
 
 					JOptionPane.showMessageDialog(null, "Please Fill all the details");
 				} else {
-					try {
+					
 						
 						if(stem.isSelected())
 		    			{
+							thread2 = new Thread() {
+								public void run() {
+									try {
+										com.Sortex.controller.TCPClient.train("stemRowData");
+									} catch (UnknownHostException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									
+
+								}
+							};
+							thread2.start();
 							
-							com.Sortex.controller.TCPClient.train("stemRowData");
+							
 		    			}
 		    			if(leaf.isSelected())
 		    			{
-		    				com.Sortex.controller.TCPClient.train("leafRowData");
-		    			}
-						
-					} catch (UnknownHostException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
+		    				 thread2 = new Thread() {
+								public void run() {
+									try {
+										com.Sortex.controller.TCPClient.train("leafRowData");
+									} catch (UnknownHostException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									
 
+								}
+							};
+							thread2.start();
+		    				
+		    			}
+		    			BufferedReader br = null;
+		    			String[] stringBuffer = new String [3];
+		    			String line;
+		    			int i=0;
+		    			boolean empty=true;
+				
 					if (com.Sortex.controller.TCPClient.status) {
 
 						panel5.remove(imgLabel);
 						panel5.validate();
 						panel5.repaint();
 						thread.interrupt();
+						thread2.interrupt();
 						// runexe();
+						
+						try {
+							 br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
+							 while(br.readLine() == null||(!isLastLine()));
+								
+							 
+							 while((line=br.readLine()) != null){
+								 stringBuffer[i++]=line;
+							 }
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}   
+						
+						
 
 					}
 
@@ -292,11 +391,13 @@ public class Window3 {
 				new Insets(2, 2, 2, 2), 0, 0));
 		container.add(panel2, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(2, 2, 2, 2), 0, 0));
-		container.add(panel3, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
-				new Insets(2, 2, 2, 2), 5, 5));
-		container.add(panel4, new GridBagConstraints(1, 1, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+		container.add(tempPanel, new GridBagConstraints(0, 1, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(2, 2, 2, 2), 0, 0));
-		container.add(panel5, new GridBagConstraints(0, 3, 2, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+		container.add(panel3, new GridBagConstraints(0, 2, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+				new Insets(2, 2, 2, 2), 5, 5));
+		container.add(panel4, new GridBagConstraints(0, 3, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+				new Insets(2, 2, 2, 2), 0, 0));
+		container.add(panel5, new GridBagConstraints(0, 4, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(2, 2, 2, 2), 0, 0));
 		return container;
 	}
@@ -329,6 +430,37 @@ public class Window3 {
 		for(File file: dir.listFiles()) {
 		    if (!file.isDirectory()) 
 		        file.delete();}
+	}
+	public JSlider getSlider(int min, int max, int init, int mjrTkSp, int mnrTkSp) {
+		JSlider slider = new JSlider(JSlider.HORIZONTAL, min, max, init);
+		slider.setPaintTicks(true);
+		slider.setMajorTickSpacing(mjrTkSp);
+		slider.setMinorTickSpacing(mnrTkSp);
+		slider.setPaintLabels(true);
+		//slider.addChangeListener(new SliderListener());
+		return slider;
+	}
+	public boolean isLastLine() throws IOException
+	{
+		BufferedReader 
+		 br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
+		
+		String lastLine = "";
+
+	    String sCurrentLine;
+		while ((sCurrentLine = br.readLine()) != null) 
+	    {
+	        System.out.println(sCurrentLine);
+	        lastLine = sCurrentLine;
+	    }
+		if(lastLine=="END")
+		{
+			  return true;
+		}
+		else{
+			  return false;
+		}
+	  
 	}
 
 }
