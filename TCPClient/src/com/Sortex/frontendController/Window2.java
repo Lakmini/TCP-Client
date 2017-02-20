@@ -211,7 +211,15 @@ public class Window2 {
 			}
 
 			try {
-				com.Sortex.controller.TCPClient.sendParameters(redValue, greenValue, blueValue);
+				if(slider== sliderR || slider== sliderG || slider == sliderB){
+					
+					com.Sortex.controller.TCPClient.sendBackgroundColorParameters(redValue, greenValue, blueValue);
+					}
+				
+				if(slider== sliderRX || slider== sliderGX || slider == sliderBX)
+				{
+					com.Sortex.controller.TCPClient.sendStemLeafTresholds(redValueX, greenValueX, blueValueX);
+				}
 
 			} catch (UnknownHostException e1) {
 

@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
@@ -141,9 +142,7 @@ public class Window3 {
 			public void keyTyped(KeyEvent e) {
 				if (userText.getText().length() >= 3) {
 					e.consume();
-					String temp = userText.getText();
-					numberOfFrames = Integer.parseInt(temp);
-					System.out.println("Number of Frames : " + numberOfFrames);
+					
 				}
 				char c = e.getKeyChar();
 				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
@@ -195,6 +194,13 @@ public class Window3 {
 
 				type = null;
 				category = null;
+				cleanDirectory("../TCPClient/stemRowData");
+				
+				cleanDirectory("../TCPClient/leafRowData");
+				 
+				cleanDirectory("../TCPClient/testInStem");
+				cleanDirectory("../TCPClient/testInLeaf");
+				
 
 			}
 		});
@@ -224,13 +230,40 @@ public class Window3 {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				String temp = userText.getText();
+				numberOfFrames = Integer.parseInt(temp);
+    			com.Sortex.controller.TCPClient.NUMBER_OF_FRAMES= numberOfFrames;
+				//System.out.println("Number of Frames : " + numberOfFrames);
+    			
+    			Thread thread = new Thread() {
+					public void run() {
+
+						panel5.add(imgLabel, BorderLayout.PAGE_START);
+						panel5.validate();
+						panel5.repaint();
+
+					}
+				};
+				thread.start();
+				
+				
 
 				if (userText.getText().isEmpty() || bG.getSelection() == null || bG2.getSelection() == null) {
 
 					JOptionPane.showMessageDialog(null, "Please Fill all the details");
 				} else {
 					try {
-						com.Sortex.controller.TCPClient.train();
+						
+						if(stem.isSelected())
+		    			{
+							
+							com.Sortex.controller.TCPClient.train("stemRowData");
+		    			}
+		    			if(leaf.isSelected())
+		    			{
+		    				com.Sortex.controller.TCPClient.train("leafRowData");
+		    			}
+						
 					} catch (UnknownHostException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -238,16 +271,7 @@ public class Window3 {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					Thread thread = new Thread() {
-						public void run() {
-
-							panel5.add(imgLabel, BorderLayout.PAGE_START);
-							panel5.validate();
-							panel5.repaint();
-
-						}
-					};
-					thread.start();
+					
 
 					if (com.Sortex.controller.TCPClient.status) {
 
@@ -290,6 +314,21 @@ public class Window3 {
 		} catch (Exception err) {
 			err.printStackTrace();
 		}
+	}
+	
+	public void cleanDirectory(String folderName)
+	{
+		
+		final File dir = new File(folderName);
+		String msg="Folder"+folderName+" Does not exists";
+		
+		if(!dir.exists())
+		{
+			JOptionPane.showMessageDialog(null,msg);
+		}
+		for(File file: dir.listFiles()) {
+		    if (!file.isDirectory()) 
+		        file.delete();}
 	}
 
 }

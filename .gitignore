@@ -1,4 +1,7 @@
 TCPClient/out.bin
 TCPClient/outputImages/*
 TCPClient/rowdataoutputImages/*
-
+TCPClient/stemRowData/*
+TCPClient/leafRowData/*
+TCPClient/testInLeaf/*
+TCPClient/testInStem/*

@@ -9,9 +9,12 @@ public class TCPClient {
 	final static int NUMBER_OF_BYTES_PER_LINE = 2560;
 	final static int NUMBER_OF_LINES_PER_FRAME = 240;
 	final static int NUMBER_OF_BYTES_PER_FRAME = NUMBER_OF_BYTES_PER_LINE * NUMBER_OF_LINES_PER_FRAME;
-	final static int NUMBER_OF_FRAMES = 500;
+	public static int NUMBER_OF_FRAMES ;
 	final static int HEADER_VALUE1=192;
 	final static int HEADER_VALUE2=64;
+	final static int HEADER_MONITOR_ON = 160;
+	final static int HEADER_MONITOR_OFF = 128;
+	
 	private static Timer timer = new Timer();
 	static Socket clientSocket;
 	static DataOutputStream outToServer;
@@ -27,7 +30,7 @@ public class TCPClient {
 		dis = new DataInputStream(in);
 		System.out.println("Connected to server");
 	}
-	public static void sendTestParameters(int param1, int param2, int param3) throws UnknownHostException, IOException {
+	public static void sendStemLeafTresholds(int param1, int param2, int param3) throws UnknownHostException, IOException {
 		buildServerConnection();
 		
 		byte [] paramBuffer=new byte[4];
@@ -43,7 +46,7 @@ public class TCPClient {
 		
 
 	}
-	public static void sendParameters(int _R, int _G, int _B) throws UnknownHostException, IOException {
+	public static void sendBackgroundColorParameters(int _R, int _G, int _B) throws UnknownHostException, IOException {
 		buildServerConnection();
 		
 		byte [] paramBuffer=new byte[4];
@@ -59,13 +62,35 @@ public class TCPClient {
 		
 
 	}
+	public static void controlMonitor(int tabId) throws UnknownHostException, IOException
+	{
+		buildServerConnection();
+		byte [] paramBuffer=new byte[4];
+		paramBuffer[1]=toByte(0);
+		paramBuffer[2]=toByte(0);
+		paramBuffer[0]=toByte(0);
+		
+		if(tabId==1)
+		{
+			paramBuffer[3]=toByte(HEADER_MONITOR_ON);
+		}
+		if(tabId==0)
+		{
+			paramBuffer[3]=toByte(HEADER_MONITOR_OFF);
+		}
+		
+		outToServer.write(paramBuffer);
+		
+		clientSocket.close();
+	}
 	public static byte toByte(int number) {
 	    int tmp = number & 0xff;
 	    return (byte) ((tmp & 0x80) == 0 ? tmp : tmp - 256);
 	}
 
 	// note :main method changed as train()
-	public static void train() throws UnknownHostException, IOException {
+	public static void train(String folderName) throws UnknownHostException, IOException {
+		System.out.println(folderName+"++++++++++++++++++++++++++++");
 		buildServerConnection();
 		byte[] _32bitframe = new byte[4];
 		for (byte b1 : _32bitframe) {
@@ -83,7 +108,7 @@ public class TCPClient {
 
 		// ... the code being measured ...
 
-		Controller.start(NUMBER_OF_FRAMES);
+		Controller.start(NUMBER_OF_FRAMES,folderName);
 		Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 		// get 1000 frames
 		for (int i = 0; i < NUMBER_OF_FRAMES; i++) {
@@ -104,27 +129,16 @@ public class TCPClient {
 					// try{
 
 					bytesRead = dis.read(byteBuf, frameByteCount, NUMBER_OF_BYTES_PER_PACKET);
-					// if(bytesRead<NUMBER_OF_BYTES_PER_PACKET){
-					// System.out.println("Partial Packet: "+bytesRead);
-					// }
-
-					// }
-					// catch(java.lang.IndexOutOfBoundsException e){
-					// System.out.println(frameByteCount+":"+e);
-					// frameByteCount=0;
-					// break;
-					// }
+					
 					bytesRecived += bytesRead;
 					frameByteCount += bytesRead;
 
 				}
 
 			}
-			// totalByteCount+=frameByteCount;
-			// FileHandler.writeFile(byteBuf,new String(i+""));
+			
 			FrameBuffer.addToBuffer(byteBuf);
-			// long time = System.nanoTime() - start;
-			// System.out.println(" time: "+time/1000000+"ms");
+		
 
 		}
 
@@ -133,7 +147,7 @@ public class TCPClient {
 		System.out.println("frame received,fps:" + NUMBER_OF_FRAMES / (estimatedTime / 1000000000.0) + " time: "
 				+ estimatedTime / 1000000 + "ms");
 
-		FileHandler.convertToRGB(1280, NUMBER_OF_LINES_PER_FRAME, "rowdataoutputImages");
+		FileHandler.convertToRGB(1280, NUMBER_OF_LINES_PER_FRAME, folderName);
 		clientSocket.close();
 
 		System.out.println("Converting Succefull");

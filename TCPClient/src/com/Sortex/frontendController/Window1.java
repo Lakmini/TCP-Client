@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -80,10 +82,21 @@ public class Window1 {
 				System.out.println("You are in tab : " + selectedIndex);
 
 				if (selectedIndex == 0) {
-					// monitor off : Auto Thresholding tab
+					try {
+						com.Sortex.controller.TCPClient.controlMonitor(0);
+					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, "Please Check the Connection");
+						//e1.printStackTrace();
+					}
 				}
 				if (selectedIndex == 1) {
-					// monitor on : manual thresholding tab
+					try {
+						com.Sortex.controller.TCPClient.controlMonitor(1);
+					
+					} catch (IOException e1) {
+						
+						JOptionPane.showMessageDialog(null, "Please Check the Connection");
+					}
 				}
 
 			}

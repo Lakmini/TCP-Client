@@ -7,7 +7,7 @@ public class Controller {
 	private static Timer timer = new Timer();
 	
 	private static int imageNumber=0;
-	public static void start(int numberOfFrames){
+	public static void start(int numberOfFrames,String directoryName){
 		  //Viewer.initialize();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			  @Override
@@ -20,10 +20,12 @@ public class Controller {
 							 
 							//	FileHandler.convertImages(buf, imageNumber++);
 //							
-								FileHandler.writeFile(buf, new String(""+imageNumber));
+								FileHandler.writeFile(buf, new String(""+imageNumber),directoryName);
 								imageNumber++;
-								if(imageNumber>=numberOfFrames)
-									this.cancel();
+								if(imageNumber>numberOfFrames){
+									System.out.println("**********************");
+									imageNumber=0;
+									this.cancel();}
 													  
 							  }
 				//         }
