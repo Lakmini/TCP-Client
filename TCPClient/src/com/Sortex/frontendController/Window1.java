@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -71,7 +73,7 @@ public class Window1 {
 
 		panel2 = window2.init();
 		panel4 = window3.createTestPanel();
-		frame.setSize(600, 600);
+		frame.setSize(800, 480);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jtp.addTab("Auto Thresholding", panel4);
 		jtp.addTab("Manual Thresholding", panel2);
@@ -83,12 +85,17 @@ public class Window1 {
 				selectedIndex = jtp.getSelectedIndex();
 				System.out.println("You are in tab : " + selectedIndex);
 
-				if (selectedIndex == 0) {
-					// monitor off : Auto Thresholding tab
+				try {
+					com.Sortex.controller.TCPClient.controlMonitor(selectedIndex);
+				} catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-				if (selectedIndex == 1) {
-					// monitor on : manual thresholding tab
-				}
+			
+				
 
 			}
 		});
