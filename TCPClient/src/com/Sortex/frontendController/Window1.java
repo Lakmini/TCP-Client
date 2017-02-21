@@ -39,9 +39,9 @@ public class Window1 {
 		frame = new JFrame("Sorter");
 		frame.setResizable(false);
 		jtp = new JTabbedPane();
-		//mainPanel.add(jtp);
+		// mainPanel.add(jtp);
 		frame.getContentPane().add(jtp);
-		//frame.add(mainPanel);
+		// frame.add(mainPanel);
 		window2 = new Window2();
 		panel = new JPanel();
 		panel.setBackground(Color.DARK_GRAY);

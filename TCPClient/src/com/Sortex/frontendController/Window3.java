@@ -50,14 +50,15 @@ public class Window3 {
 	JSlider sensitivitySlider;
 	JLabel sensitivity = new JLabel("Sensitivity");
 	JButton statistics = new JButton("Statistics");
-	JButton result = new JButton("Result");
-	
+	JButton result = new JButton("Display");
+
 	// parameters
 	int redValue;
 	int greenValue;
 	int blueValue;
 	String type;
 	String category;
+	int sensitivityValue;
 
 	public JPanel createTestPanel() {
 		container = new JPanel();
@@ -153,7 +154,7 @@ public class Window3 {
 			public void keyTyped(KeyEvent e) {
 				if (userText.getText().length() >= 3) {
 					e.consume();
-					
+
 				}
 				char c = e.getKeyChar();
 				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
@@ -208,29 +209,31 @@ public class Window3 {
 				type = null;
 				category = null;
 				cleanDirectory("../TCPClient/stemRowData");
-				
+
 				cleanDirectory("../TCPClient/leafRowData");
-				 
+
 				cleanDirectory("../TCPClient/testInStem");
 				cleanDirectory("../TCPClient/testInLeaf");
-				
 
 			}
 		});
 		statistics.addActionListener(new ActionListener() {
-			
+
+			String path = "../TCPClient/TrainingModule/StatDisplayMain/for_testing/StatDisplayMain.exe";
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				
+				runexe(path);
+
 			}
 		});
 		result.addActionListener(new ActionListener() {
-			
+			String path = "../TCPClient/TrainingModule/ImageDisplayMain/for_testing/ImageDisplayMain.exe";
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				
+				runexe(path);
+
 			}
 		});
 
@@ -253,44 +256,49 @@ public class Window3 {
 		logoIcon = new ImageIcon(newimg2);
 		JLabel logo = new JLabel(logoIcon);
 		panel5.add(logo, BorderLayout.EAST);
-		
+
 		/************************** temp panel ********************/
-		sensitivitySlider = getSlider(0, 255, 0, 50, 5);
+		sensitivitySlider = getSlider(0, 100, 0, 10, 5);
 		JPanel tempPanel = new JPanel();
 		tempPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(6, 6, 6, 6);
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 		gbc.fill = GridBagConstraints.VERTICAL;
-		
-		
-		
 
-		
-		
-		tempPanel.add(sensitivity, new GridBagConstraints(0, 0, 1, 1, 0.2,0.1, GridBagConstraints.WEST,
+		tempPanel.add(sensitivity, new GridBagConstraints(0, 0, 1, 1, 0.2, 0.1, GridBagConstraints.WEST,
 				GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
 		tempPanel.add(sensitivitySlider, new GridBagConstraints(1, 0, 2, 1, 0.5, 0.1, GridBagConstraints.WEST,
 				GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
 		sensitivitySlider.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				// TODO Auto-generated method stub
-				
+				sensitivityValue = sensitivitySlider.getValue();
+				try {
+					com.Sortex.controller.TCPClient.sendSensitivityParams(sensitivityValue);
+				} catch (UnknownHostException e) {
+
+					e.printStackTrace();
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
+
 			}
 		});
-		
+
 		startButton.addActionListener(new ActionListener() {
 			Thread thread2;
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String temp = userText.getText();
 				numberOfFrames = Integer.parseInt(temp);
-    			com.Sortex.controller.TCPClient.NUMBER_OF_FRAMES= numberOfFrames;
-				//System.out.println("Number of Frames : " + numberOfFrames);
-    			
-    			Thread thread = new Thread() {
+				com.Sortex.controller.TCPClient.NUMBER_OF_FRAMES = numberOfFrames;
+				// System.out.println("Number of Frames : " + numberOfFrames);
+
+				Thread thread = new Thread() {
 					public void run() {
 
 						panel5.add(imgLabel, BorderLayout.PAGE_START);
@@ -300,62 +308,54 @@ public class Window3 {
 					}
 				};
 				thread.start();
-				
-				
 
 				if (userText.getText().isEmpty() || bG.getSelection() == null || bG2.getSelection() == null) {
 
 					JOptionPane.showMessageDialog(null, "Please Fill all the details");
 				} else {
-					
-						
-						if(stem.isSelected())
-		    			{
-							thread2 = new Thread() {
-								public void run() {
-									try {
-										com.Sortex.controller.TCPClient.train("stemRowData");
-									} catch (UnknownHostException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									} catch (IOException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-									
 
+					if (stem.isSelected()) {
+						thread2 = new Thread() {
+							public void run() {
+								try {
+									com.Sortex.controller.TCPClient.train("stemRowData");
+								} catch (UnknownHostException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
 								}
-							};
-							thread2.start();
-							
-							
-		    			}
-		    			if(leaf.isSelected())
-		    			{
-		    				 thread2 = new Thread() {
-								public void run() {
-									try {
-										com.Sortex.controller.TCPClient.train("leafRowData");
-									} catch (UnknownHostException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									} catch (IOException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-									
 
+							}
+						};
+						thread2.start();
+
+					}
+					if (leaf.isSelected()) {
+						thread2 = new Thread() {
+							public void run() {
+								try {
+									com.Sortex.controller.TCPClient.train("leafRowData");
+								} catch (UnknownHostException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
 								}
-							};
-							thread2.start();
-		    				
-		    			}
-		    			BufferedReader br = null;
-		    			String[] stringBuffer = new String [3];
-		    			String line;
-		    			int i=0;
-		    			boolean empty=true;
-				
+
+							}
+						};
+						thread2.start();
+
+					}
+					BufferedReader br = null;
+					String[] stringBuffer = new String[3];
+					String line;
+					int i = 0;
+					boolean empty = true;
+
 					if (com.Sortex.controller.TCPClient.status) {
 
 						panel5.remove(imgLabel);
@@ -364,21 +364,19 @@ public class Window3 {
 						thread.interrupt();
 						thread2.interrupt();
 						// runexe();
-						
+
 						try {
-							 br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
-							 while(br.readLine() == null||(!isLastLine()));
-								
-							 
-							 while((line=br.readLine()) != null){
-								 stringBuffer[i++]=line;
-							 }
+							br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
+							while (br.readLine() == null || (!isLastLine()))
+								;
+
+							while ((line = br.readLine()) != null) {
+								stringBuffer[i++] = line;
+							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}   
-						
-						
+						}
 
 					}
 
@@ -391,8 +389,8 @@ public class Window3 {
 				new Insets(2, 2, 2, 2), 0, 0));
 		container.add(panel2, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(2, 2, 2, 2), 0, 0));
-		container.add(tempPanel, new GridBagConstraints(0, 1, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
-				new Insets(2, 2, 2, 2), 0, 0));
+		container.add(tempPanel, new GridBagConstraints(0, 1, 2, 1, 1, 1, GridBagConstraints.WEST,
+				GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
 		container.add(panel3, new GridBagConstraints(0, 2, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(2, 2, 2, 2), 5, 5));
 		container.add(panel4, new GridBagConstraints(0, 3, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
@@ -402,8 +400,9 @@ public class Window3 {
 		return container;
 	}
 
-	public void runexe() {
-		String commandline = "E:\\Semester8\\fyp\\Sorter\\Sorter\\for_testing\\Sorter.exe";
+	public void runexe(String commandline) {
+		// String commandline =
+		// "E:\\Semester8\\fyp\\Sorter\\Sorter\\for_testing\\Sorter.exe";
 		try {
 			String line;
 			Process p = Runtime.getRuntime().exec(commandline);
@@ -416,51 +415,47 @@ public class Window3 {
 			err.printStackTrace();
 		}
 	}
-	
-	public void cleanDirectory(String folderName)
-	{
-		
+
+	public void cleanDirectory(String folderName) {
+
 		final File dir = new File(folderName);
-		String msg="Folder"+folderName+" Does not exists";
-		
-		if(!dir.exists())
-		{
-			JOptionPane.showMessageDialog(null,msg);
+		String msg = "Folder" + folderName + " Does not exists";
+
+		if (!dir.exists()) {
+			JOptionPane.showMessageDialog(null, msg);
 		}
-		for(File file: dir.listFiles()) {
-		    if (!file.isDirectory()) 
-		        file.delete();}
+		for (File file : dir.listFiles()) {
+			if (!file.isDirectory())
+				file.delete();
+		}
 	}
+
 	public JSlider getSlider(int min, int max, int init, int mjrTkSp, int mnrTkSp) {
 		JSlider slider = new JSlider(JSlider.HORIZONTAL, min, max, init);
 		slider.setPaintTicks(true);
 		slider.setMajorTickSpacing(mjrTkSp);
 		slider.setMinorTickSpacing(mnrTkSp);
 		slider.setPaintLabels(true);
-		//slider.addChangeListener(new SliderListener());
+		// slider.addChangeListener(new SliderListener());
 		return slider;
 	}
-	public boolean isLastLine() throws IOException
-	{
-		BufferedReader 
-		 br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
-		
+
+	public boolean isLastLine() throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
+
 		String lastLine = "";
 
-	    String sCurrentLine;
-		while ((sCurrentLine = br.readLine()) != null) 
-	    {
-	        System.out.println(sCurrentLine);
-	        lastLine = sCurrentLine;
-	    }
-		if(lastLine=="END")
-		{
-			  return true;
+		String sCurrentLine;
+		while ((sCurrentLine = br.readLine()) != null) {
+			System.out.println(sCurrentLine);
+			lastLine = sCurrentLine;
 		}
-		else{
-			  return false;
+		if (lastLine == "END") {
+			return true;
+		} else {
+			return false;
 		}
-	  
+
 	}
 
 }
