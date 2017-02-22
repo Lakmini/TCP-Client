@@ -312,7 +312,7 @@ public class Window3 {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				int temp = (int) timeList.getItemAt(timeList.getSelectedIndex());
-				numberOfFrames = temp;
+				numberOfFrames = temp*3600;
 				
 				System.out.println(temp);
 				com.Sortex.controller.TCPClient.NUMBER_OF_FRAMES = numberOfFrames;
