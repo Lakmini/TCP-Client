@@ -1,6 +1,7 @@
 package com.Sortex.frontendController;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,12 +18,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,6 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.xml.ws.soap.AddressingFeature;
 
 public class Window3 {
 	JPanel container;
@@ -59,6 +64,13 @@ public class Window3 {
 	String type;
 	String category;
 	int sensitivityValue;
+	int currentPosition;
+
+	ImageIcon frameIcon;
+	Image frameimage;
+	Image newframeimg;
+
+	JLabel frameLabel;
 
 	public JPanel createTestPanel() {
 		container = new JPanel();
@@ -219,20 +231,40 @@ public class Window3 {
 		});
 		statistics.addActionListener(new ActionListener() {
 
-			String path = "../TCPClient/TrainingModule/StatDisplayMain/for_testing/StatDisplayMain.exe";
+			String path = "../TCPClient/statisticImages";
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				runexe(path);
+
+				try {
+					display(path);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 		});
 		result.addActionListener(new ActionListener() {
-			String path = "../TCPClient/TrainingModule/ImageDisplayMain/for_testing/ImageDisplayMain.exe";
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				runexe(path);
+
+				String path = null;
+				if (stem.isSelected()) {
+					path = "../TCPClient/testInStem";
+				}
+				if (leaf.isSelected()) {
+					path = "../TCPClient/testInLeaf";
+				}
+
+				try {
+					display(path);
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
+				// runexe(path);
 
 			}
 		});
@@ -456,6 +488,110 @@ public class Window3 {
 			return false;
 		}
 
+	}
+
+	public void display(String folderName) throws IOException {
+		JFrame frame = new JFrame();
+		frame.setVisible(true);
+		JPanel mainPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(6, 6, 6, 6);
+		gbc.gridwidth = GridBagConstraints.REMAINDER;
+		gbc.fill = GridBagConstraints.VERTICAL;
+
+		frame.add(mainPanel);
+		frame.setSize(800, 480);
+		JPanel panel1 = new JPanel();
+		JPanel panel2 = new JPanel();
+		JButton nextButton = new JButton("Next");
+		JButton prevButton = new JButton("Previous");
+		panel2.add(nextButton);
+		panel2.add(prevButton);
+
+		File[] fileList = readImages(folderName);
+
+		String imagepath = folderName + "/" + fileList[0].getName();
+
+		// System.out.println(imagepath);
+		frameIcon = new ImageIcon(imagepath);
+		frameimage = frameIcon.getImage(); // transform it
+		newframeimg = frameimage.getScaledInstance(200, 150, Image.SCALE_FAST);
+		frameIcon = new ImageIcon(newframeimg);
+		frameLabel = new JLabel(frameIcon);
+		panel1.add(frameLabel);
+		currentPosition = 0;
+
+		nextButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentPosition++;
+				if (currentPosition > fileList.length) {
+					JOptionPane.showMessageDialog(null, "End of files");
+				} else {
+					panel1.remove(frameLabel);
+					String imagepath = folderName + "/" + fileList[currentPosition].getName();
+					System.out.println(imagepath);
+					frameIcon = new ImageIcon(imagepath);
+					frameimage = frameIcon.getImage(); // transform it
+					newframeimg = frameimage.getScaledInstance(200, 150, Image.SCALE_FAST);
+					frameIcon = new ImageIcon(newframeimg);
+					frameLabel = new JLabel(frameIcon);
+
+					panel1.add(frameLabel);
+					panel1.repaint();
+					panel1.validate();
+				}
+
+			}
+		});
+
+		prevButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				currentPosition--;
+				if (currentPosition < 0) {
+					JOptionPane.showMessageDialog(null, "Begin");
+				} else {
+					panel1.remove(frameLabel);
+					String imagepath = folderName + "/" + fileList[currentPosition].getName();
+					System.out.println(imagepath);
+					frameIcon = new ImageIcon(imagepath);
+					frameimage = frameIcon.getImage(); // transform it
+					newframeimg = frameimage.getScaledInstance(200, 150, Image.SCALE_FAST);
+					frameIcon = new ImageIcon(newframeimg);
+					frameLabel = new JLabel(frameIcon);
+
+					panel1.add(frameLabel);
+					panel1.repaint();
+					panel1.validate();
+				}
+
+			}
+		});
+
+		mainPanel.add(panel1, new GridBagConstraints(0, 1, 3, 1, 2, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+				new Insets(2, 2, 2, 2), 0, 0));
+
+		mainPanel.add(panel2, new GridBagConstraints(0, 2, 1, 1, 2, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+				new Insets(2, 2, 2, 2), 0, 0));
+
+	}
+
+	public File[] readImages(String folderName) throws IOException {
+		File folder = new File(folderName);
+		File[] listOfFiles = folder.listFiles();
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isFile()) {
+				System.out.println(listOfFiles[i].getName());
+			} else if (listOfFiles[i].isDirectory()) {
+				System.out.println("Directory " + listOfFiles[i].getName());
+			}
+		}
+
+		return listOfFiles;
 	}
 
 }
