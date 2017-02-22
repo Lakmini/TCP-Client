@@ -1,6 +1,7 @@
 package com.Sortex.frontendController;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -54,7 +55,10 @@ public class Window1 {
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.noire.NoireLookAndFeel");
-
+			UIManager.put("Button.font",new Font("Arial", Font.BOLD, 25) );
+			UIManager.put("Label.font",new Font("Arial", Font.BOLD, 12) );
+			UIManager.put("RadioButton.font",new Font("Arial", Font.BOLD, 25) );
+			UIManager.put("ComboBox.font",new Font("Arial", Font.BOLD, 25) );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

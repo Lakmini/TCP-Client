@@ -3,6 +3,7 @@ package com.Sortex.frontendController;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -26,6 +27,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -75,7 +77,7 @@ public class Window3 {
 	public JPanel createTestPanel() {
 		container = new JPanel();
 		container.setLayout(new GridBagLayout());
-
+		sensitivity.setFont(new Font("Arial", Font.BOLD, 25));
 		/***************************
 		 * Panel 1
 		 **************************************/
@@ -83,12 +85,14 @@ public class Window3 {
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
 		panel1.setBorder(BorderFactory.createEtchedBorder());
 		TitledBorder border = new TitledBorder("Select Type");
+		 border.setTitleFont(new Font("Arial", Font.ITALIC, 25));
 		border.setTitleJustification(TitledBorder.LEFT);
 		border.setTitlePosition(TitledBorder.TOP);
 		panel1.setBorder(border);
 
 		// add radio buttons
 		JRadioButton stem = new JRadioButton("Stem");
+		
 		JRadioButton leaf = new JRadioButton("Leaf");
 		ButtonGroup bG = new ButtonGroup();
 		bG.add(stem);
@@ -123,6 +127,7 @@ public class Window3 {
 		panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
 		panel2.setBorder(BorderFactory.createEtchedBorder());
 		TitledBorder border2 = new TitledBorder("Select Tea Category");
+		border2.setTitleFont(new Font("Arial", Font.ITALIC, 25));
 		border2.setTitleJustification(TitledBorder.LEFT);
 		border2.setTitlePosition(TitledBorder.TOP);
 		panel2.setBorder(border2);
@@ -156,38 +161,19 @@ public class Window3 {
 		panel3 = new JPanel(new BorderLayout(10, 10));
 		startButton = new JButton("Start");
 		resetButton = new JButton("Reset");
-		final JTextField userText = new JTextField();
-		userText.setPreferredSize(new Dimension(60, 25));
-		userText.setText("");
-		JLabel noOfFrames = new JLabel("Number of Frames :");
-		userText.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (userText.getText().length() >= 3) {
-					e.consume();
-
-				}
-				char c = e.getKeyChar();
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
-					e.consume();
-				}
-
-			}
-
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-
-			}
-
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-
-			}
-
-		});
-		;
-
+		int[] timeStrings = { 1,2,5,10,20,30 };
+		
+		JComboBox timeList = new JComboBox();
+		timeList.addItem(1);
+		timeList.addItem(2);
+		timeList.addItem(5);
+		timeList.addItem(10);
+		timeList.addItem(20);
+		timeList.addItem(30);
+		timeList.setSize(5, 10);
+		JLabel noOfFrames = new JLabel("Capturing Time:");
+		
+		noOfFrames.setFont(new Font("Arial", Font.BOLD, 25));
 		JPanel inputLabels = new JPanel();
 		JPanel inputField = new JPanel();
 		JPanel controlinputs = new JPanel(new BorderLayout());
@@ -197,7 +183,7 @@ public class Window3 {
 		controls.add(statistics);
 		controls.add(result);
 		inputLabels.add(noOfFrames);
-		inputField.add(userText);
+		inputField.add(timeList);
 		controlinputs.add(inputLabels, BorderLayout.WEST);
 		controlinputs.add(inputField, BorderLayout.CENTER);
 		panel3.add(controlinputs, BorderLayout.WEST);
@@ -216,7 +202,7 @@ public class Window3 {
 				panel5.remove(imgLabel);
 				panel5.validate();
 				panel5.repaint();
-				userText.setText("");
+				
 				sensitivitySlider.setValue(0);
 				type = null;
 				category = null;
@@ -325,8 +311,10 @@ public class Window3 {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String temp = userText.getText();
-				numberOfFrames = Integer.parseInt(temp);
+				int temp = (int) timeList.getItemAt(timeList.getSelectedIndex());
+				numberOfFrames = temp;
+				
+				System.out.println(temp);
 				com.Sortex.controller.TCPClient.NUMBER_OF_FRAMES = numberOfFrames;
 				// System.out.println("Number of Frames : " + numberOfFrames);
 
@@ -341,7 +329,7 @@ public class Window3 {
 				};
 				thread.start();
 
-				if (userText.getText().isEmpty() || bG.getSelection() == null || bG2.getSelection() == null) {
+				if ( bG.getSelection() == null || bG2.getSelection() == null) {
 
 					JOptionPane.showMessageDialog(null, "Please Fill all the details");
 				} else {
