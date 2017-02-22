@@ -87,6 +87,12 @@ public class TCPClient {
 		paramBuffer[0] = toByte(sensitivityValue);
 		paramBuffer[3] = toByte(HEADER_SENSITIVITY_VALUE);
 		outToServer.write(paramBuffer);
+		
+		paramBuffer[1] = toByte(0);
+		paramBuffer[2] = toByte(0);
+		paramBuffer[0] = toByte(sensitivityValue);
+		paramBuffer[3] = toByte(12);
+		outToServer.write(paramBuffer);
 		clientSocket.close();
 
 	}

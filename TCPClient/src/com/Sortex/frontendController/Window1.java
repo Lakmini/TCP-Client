@@ -82,7 +82,11 @@ public class Window1 {
 			public void stateChanged(ChangeEvent e) {
 				selectedIndex = jtp.getSelectedIndex();
 				System.out.println("You are in tab : " + selectedIndex);
+<<<<<<< HEAD
 				
+=======
+
+>>>>>>> d446ad6531feeeb0030b3d3bd2581978eb4950e8
 				try {
 					com.Sortex.controller.TCPClient.controlMonitor(selectedIndex);
 				} catch (UnknownHostException e1) {
@@ -92,6 +96,12 @@ public class Window1 {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+<<<<<<< HEAD
+=======
+			
+				
+
+>>>>>>> d446ad6531feeeb0030b3d3bd2581978eb4950e8
 			}
 		});
 
