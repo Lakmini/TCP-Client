@@ -231,7 +231,7 @@ public class Window3 {
 		});
 		statistics.addActionListener(new ActionListener() {
 
-			String path = "../TCPClient/statisticImages";
+			String path = "../TCPClient/TrainingModule/Stats";
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -252,10 +252,10 @@ public class Window3 {
 
 				String path = null;
 				if (stem.isSelected()) {
-					path = "../TCPClient/testInStem";
+					path = "../TCPClient/TrainingModule/testOutStem";
 				}
 				if (leaf.isSelected()) {
-					path = "../TCPClient/testInLeaf";
+					path = "../TCPClient/TrainingModule/testOutStem";
 				}
 
 				try {
@@ -358,6 +358,35 @@ public class Window3 {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
+								BufferedReader br = null;
+								String[] stringBuffer = new String[3];
+								String line;
+								int i = 0;
+								boolean empty = true;
+
+								if (com.Sortex.controller.TCPClient.status) {
+
+									panel5.remove(imgLabel);
+									panel5.validate();
+									panel5.repaint();
+									thread.interrupt();
+									thread2.interrupt();
+									runexe("../TCPClient/TraningModule/Sorter/for_Testing/Sorter.exe");
+
+									try {
+										br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
+										while (br.readLine() == null || (!isLastLine()))
+											;
+
+										while ((line = br.readLine()) != null) {
+											stringBuffer[i++] = line;
+										}
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+
+								}
 
 							}
 						};
@@ -376,41 +405,43 @@ public class Window3 {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
+								
+								BufferedReader br = null;
+								String[] stringBuffer = new String[3];
+								String line;
+								int i = 0;
+								boolean empty = true;
+
+								if (com.Sortex.controller.TCPClient.status) {
+
+									panel5.remove(imgLabel);
+									panel5.validate();
+									panel5.repaint();
+									thread.interrupt();
+									thread2.interrupt();
+									runexe("../TCPClient/TraningModule/Sorter/for_Testing/Sorter.exe");
+
+									try {
+										br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
+										while (br.readLine() == null || (!isLastLine()))
+											;
+
+										while ((line = br.readLine()) != null) {
+											stringBuffer[i++] = line;
+										}
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+
+								}
 
 							}
 						};
 						thread2.start();
 
 					}
-					BufferedReader br = null;
-					String[] stringBuffer = new String[3];
-					String line;
-					int i = 0;
-					boolean empty = true;
-
-					if (com.Sortex.controller.TCPClient.status) {
-
-						panel5.remove(imgLabel);
-						panel5.validate();
-						panel5.repaint();
-						thread.interrupt();
-						thread2.interrupt();
-						// runexe();
-
-						try {
-							br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
-							while (br.readLine() == null || (!isLastLine()))
-								;
-
-							while ((line = br.readLine()) != null) {
-								stringBuffer[i++] = line;
-							}
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
+			
 
 				}
 
