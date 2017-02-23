@@ -36,7 +36,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -156,7 +158,7 @@ public class Window3 {
 		timeList.addItem(20);
 		timeList.addItem(30);
 		timeList.setSize(5, 10);
-		JLabel noOfFrames = new JLabel("Capturing Time (Minutes):");
+		JLabel noOfFrames = new JLabel("Training Time (Minutes):");
 
 		noOfFrames.setFont(new Font("Arial", Font.BOLD, 20));
 
@@ -249,7 +251,7 @@ public class Window3 {
 		panel4 = new JPanel(new BorderLayout());
 		ImageIcon loadingIcon = new ImageIcon(this.getClass().getResource("/com/Sortex/images/loader1.gif"));
 		Image image = loadingIcon.getImage(); // transform it
-		Image newimg = image.getScaledInstance(500, 30, Image.SCALE_FAST);
+		Image newimg = image.getScaledInstance(450, 30, Image.SCALE_FAST);
 		loadingIcon = new ImageIcon(newimg); // transform it back
 		imgLabel = new JLabel(loadingIcon);
 		panel4.add(controls, BorderLayout.CENTER);
@@ -264,7 +266,7 @@ public class Window3 {
 		panel5.add(logo, BorderLayout.EAST);
 
 		/************************** temp panel ********************/
-		sensitivitySlider = getSlider(0, 100, 0, 10, 5);
+		sensitivitySlider = getSlider(0, 100, 50, 10, 5);
 		JPanel tempPanel = new JPanel();
 		tempPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -305,27 +307,32 @@ public class Window3 {
 				System.out.println(temp);
 				com.Sortex.controller.TCPClient.NUMBER_OF_FRAMES = numberOfFrames;
 
-				Thread thread = new Thread() {
-					public void run() {
-						long startTime = System.currentTimeMillis();
-						panel5.add(imgLabel, BorderLayout.PAGE_START);
-						panel5.validate();
-						panel5.repaint();
-						while (System.currentTimeMillis() < startTime + (2 * 60000))
-							;
-
-						panel5.remove(imgLabel);
-						panel5.validate();
-						panel5.repaint();
-
-					}
-				};
-				thread.start();
+				
 
 				if (bG.getSelection() == null) {
 
 					JOptionPane.showMessageDialog(null, "Please Fill all the details");
+					
+					
 				} else {
+					Thread thread = new Thread() {
+						public void run() {
+							long startTime = System.currentTimeMillis();
+							panel5.add(imgLabel, BorderLayout.PAGE_START);
+							panel5.validate();
+							panel5.repaint();
+							while (System.currentTimeMillis() < startTime + (2 * 60000))
+								;
+
+							panel5.remove(imgLabel);
+							panel5.validate();
+							panel5.repaint();
+							
+							JOptionPane.showMessageDialog(null , "Training is Completed ....");
+
+						}
+					};
+					thread.start();
 
 					if (stem.isSelected()) {
 						thread2 = new Thread() {
@@ -368,13 +375,20 @@ public class Window3 {
 										int R = Integer.parseInt(rgbBackGround[0]);
 										int G = Integer.parseInt(rgbBackGround[1]);
 										int B = Integer.parseInt(rgbBackGround[2]);
+										int Rx = Integer.parseInt(rgbStringAndLeaf[0]);
+										int Gx = Integer.parseInt(rgbStringAndLeaf[1]);
+										int Bx = Integer.parseInt(rgbStringAndLeaf[2]);
+										
+										
+										
+										
+										
+										
 										com.Sortex.controller.TCPClient.sendBackgroundColorParameters(R, G, B);
 										long startTimex = System.currentTimeMillis();
 										while (System.currentTimeMillis() < startTimex + (200))
 											;
-										int Rx = Integer.parseInt(rgbStringAndLeaf[0]);
-										int Gx = Integer.parseInt(rgbStringAndLeaf[1]);
-										int Bx = Integer.parseInt(rgbStringAndLeaf[2]);
+										
 										com.Sortex.controller.TCPClient.sendBackgroundColorParameters(Rx, Gx, Bx);
 										startTimex = System.currentTimeMillis();
 										while (System.currentTimeMillis() < startTimex + (200))

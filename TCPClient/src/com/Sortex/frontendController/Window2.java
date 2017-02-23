@@ -63,7 +63,7 @@ public class Window2 {
 		sliderRX = getSlider(0, 255, 0, 50, 5);
 		sliderGX = getSlider(0, 255, 0, 50, 5);
 		sliderBX = getSlider(0, 255, 0, 50, 5);
-		sensitivitySlider = getSlider(0, 100, 0, 10, 5);
+		sensitivitySlider = getSlider(0, 100, 50, 10, 5);
 		container = new JPanel();
 		container.setLayout(new GridBagLayout());
 
