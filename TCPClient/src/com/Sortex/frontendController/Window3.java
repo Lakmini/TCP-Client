@@ -315,9 +315,9 @@ public class Window3 {
 						panel5.add(imgLabel, BorderLayout.PAGE_START);
 						panel5.validate();
 						panel5.repaint();
-						while (System.currentTimeMillis() < startTime + (2*60000));
-							
-					    
+						while (System.currentTimeMillis() < startTime + (2 * 60000))
+							;
+
 						panel5.remove(imgLabel);
 						panel5.validate();
 						panel5.repaint();
@@ -359,13 +359,31 @@ public class Window3 {
 									runexe("../TCPClient/TraningModule/Sorter/for_Testing/Sorter.exe");
 
 									try {
-										br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
-										while (br.readLine() == null || (!isLastLine()))
-											;
+										br = new BufferedReader(new FileReader("../TCPClient/result.txt"));
+										// while (br.readLine() == null ||
+										// (!isLastLine()));
 
 										while ((line = br.readLine()) != null) {
 											stringBuffer[i++] = line;
 										}
+										String[] rgbBackGround = stringBuffer[0].split(",");
+										String[] rgbStringAndLeaf = stringBuffer[1].split(",");
+										// System.out.println(rgbBackGround[2]+"========");
+										int R = Integer.parseInt(rgbBackGround[0]);
+										int G = Integer.parseInt(rgbBackGround[1]);
+										int B = Integer.parseInt(rgbBackGround[2]);
+										com.Sortex.controller.TCPClient.sendBackgroundColorParameters(R, G, B);
+										long startTimex = System.currentTimeMillis();
+										while (System.currentTimeMillis() < startTimex + (200))
+											;
+										int Rx = Integer.parseInt(rgbStringAndLeaf[0]);
+										int Gx = Integer.parseInt(rgbStringAndLeaf[1]);
+										int Bx = Integer.parseInt(rgbStringAndLeaf[2]);
+										com.Sortex.controller.TCPClient.sendBackgroundColorParameters(Rx, Gx, Bx);
+										startTimex = System.currentTimeMillis();
+										while (System.currentTimeMillis() < startTimex + (200))
+											;
+										com.Sortex.controller.TCPClient.sendSensitivityParams(50);
 									} catch (IOException e) {
 
 										e.printStackTrace();
@@ -408,12 +426,31 @@ public class Window3 {
 
 									try {
 										br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
-										while (br.readLine() == null || (!isLastLine()))
-											;
+										// while (br.readLine() == null ||
+										// (!isLastLine()))
+										// ;
 
 										while ((line = br.readLine()) != null) {
 											stringBuffer[i++] = line;
 										}
+										String[] rgbBackGround = stringBuffer[0].split(",");
+										String[] rgbStringAndLeaf = stringBuffer[1].split(",");
+										// System.out.println(rgbBackGround[2]+"========");
+										int R = Integer.parseInt(rgbBackGround[0]);
+										int G = Integer.parseInt(rgbBackGround[1]);
+										int B = Integer.parseInt(rgbBackGround[2]);
+										com.Sortex.controller.TCPClient.sendBackgroundColorParameters(R, G, B);
+										long startTimex = System.currentTimeMillis();
+										while (System.currentTimeMillis() < startTimex + (200))
+											;
+										int Rx = Integer.parseInt(rgbStringAndLeaf[0]);
+										int Gx = Integer.parseInt(rgbStringAndLeaf[1]);
+										int Bx = Integer.parseInt(rgbStringAndLeaf[2]);
+										com.Sortex.controller.TCPClient.sendBackgroundColorParameters(Rx, Gx, Bx);
+										startTimex = System.currentTimeMillis();
+										while (System.currentTimeMillis() < startTimex + (200))
+											;
+										com.Sortex.controller.TCPClient.sendSensitivityParams(50);
 									} catch (IOException e) {
 										e.printStackTrace();
 									}
@@ -485,15 +522,16 @@ public class Window3 {
 	}
 
 	public boolean isLastLine() throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader("../TCPClient/config.txt"));
+		BufferedReader br = new BufferedReader(new FileReader("../TCPClient/result.txt"));
 
 		String lastLine = "";
 
 		String sCurrentLine;
 		while ((sCurrentLine = br.readLine()) != null) {
-			System.out.println(sCurrentLine);
+			// System.out.println(sCurrentLine);
 			lastLine = sCurrentLine;
 		}
+		System.out.println(lastLine);
 		if (lastLine == "END") {
 			return true;
 		} else {
