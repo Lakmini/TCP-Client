@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -87,7 +88,7 @@ public class Window3 {
 		panel1.setBorder(BorderFactory.createEtchedBorder());
 		TitledBorder border = new TitledBorder("Select Type");
 		border.setTitleFont(new Font("Arial", Font.BOLD, 20));
-		border.setTitleColor(new Color(6, 104, 35));
+		//border.setTitleColor(new Color(6, 104, 35));
 		border.setTitleJustification(TitledBorder.LEFT);
 		border.setTitlePosition(TitledBorder.TOP);
 		panel1.setBorder(border);
@@ -125,16 +126,11 @@ public class Window3 {
 		/**********************************
 		 * Panel 2
 		 ***********************************/
-		panel2 = new JPanel();
-		// panel2.setLayout(new BorderLayout());
-		panel2.setBorder(BorderFactory.createEtchedBorder());
-		TitledBorder border2 = new TitledBorder("Select Tea Category");
-		border2.setTitleFont(new Font("Arial", Font.BOLD, 20));
-		border2.setTitleColor(new Color(6, 104, 35));
-		border2.setTitleJustification(TitledBorder.LEFT);
-		border2.setTitlePosition(TitledBorder.TOP);
-		panel2.setBorder(border2);
-		// add radio buttons
+		panel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JLabel categoryLabel = new JLabel("Select Category :  ");
+		categoryLabel.setFont(new Font("Arial", Font.BOLD, 20));
+		panel2.add(categoryLabel);
+		
 		JComboBox categorySelection = new JComboBox();
 		categorySelection.addItem("OPA");
 		categorySelection.addItem("OP1");
@@ -143,8 +139,8 @@ public class Window3 {
 		categorySelection.addItem("BOP 1");
 		categorySelection.addItem("FBOP");
 		categorySelection.addItem("FBOPF");
-		categorySelection.setSize(new Dimension(100, 10));
-		panel2.add(categorySelection, BorderLayout.WEST);
+		categorySelection.setSize(new Dimension(60, 10));
+		panel2.add(categorySelection);
 
 		/****************************************** panel3 ******************/
 		panel3 = new JPanel(new BorderLayout(10, 10));
@@ -160,7 +156,7 @@ public class Window3 {
 		timeList.addItem(20);
 		timeList.addItem(30);
 		timeList.setSize(5, 10);
-		JLabel noOfFrames = new JLabel("Capturing Time:");
+		JLabel noOfFrames = new JLabel("Capturing Time (Minutes):");
 
 		noOfFrames.setFont(new Font("Arial", Font.BOLD, 20));
 
