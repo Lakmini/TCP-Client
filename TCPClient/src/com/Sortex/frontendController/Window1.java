@@ -55,10 +55,10 @@ public class Window1 {
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.noire.NoireLookAndFeel");
-			UIManager.put("Button.font",new Font("Arial", Font.BOLD, 25) );
-			UIManager.put("Label.font",new Font("Arial", Font.BOLD, 12) );
-			UIManager.put("RadioButton.font",new Font("Arial", Font.BOLD, 25) );
-			UIManager.put("ComboBox.font",new Font("Arial", Font.BOLD, 25) );
+			UIManager.put("Button.font", new Font("Arial", Font.BOLD, 25));
+			UIManager.put("Label.font", new Font("Arial", Font.BOLD, 12));
+			UIManager.put("RadioButton.font", new Font("Arial", Font.BOLD, 18));
+			UIManager.put("ComboBox.font", new Font("Arial", Font.BOLD, 18));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -86,14 +86,14 @@ public class Window1 {
 			public void stateChanged(ChangeEvent e) {
 				selectedIndex = jtp.getSelectedIndex();
 				System.out.println("You are in tab : " + selectedIndex);
-				
+
 				try {
 					com.Sortex.controller.TCPClient.controlMonitor(selectedIndex);
 				} catch (UnknownHostException e1) {
-					// TODO Auto-generated catch block
+					
 					e1.printStackTrace();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
+					
 					e1.printStackTrace();
 				}
 			}

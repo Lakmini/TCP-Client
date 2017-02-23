@@ -1,6 +1,7 @@
 package com.Sortex.frontendController;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -85,14 +86,15 @@ public class Window3 {
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
 		panel1.setBorder(BorderFactory.createEtchedBorder());
 		TitledBorder border = new TitledBorder("Select Type");
-		 border.setTitleFont(new Font("Arial", Font.ITALIC, 25));
+		border.setTitleFont(new Font("Arial", Font.BOLD, 20));
+		border.setTitleColor(new Color(6, 104, 35));
 		border.setTitleJustification(TitledBorder.LEFT);
 		border.setTitlePosition(TitledBorder.TOP);
 		panel1.setBorder(border);
 
 		// add radio buttons
 		JRadioButton stem = new JRadioButton("Stem");
-		
+
 		JRadioButton leaf = new JRadioButton("Leaf");
 		ButtonGroup bG = new ButtonGroup();
 		bG.add(stem);
@@ -124,45 +126,32 @@ public class Window3 {
 		 * Panel 2
 		 ***********************************/
 		panel2 = new JPanel();
-		panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+		// panel2.setLayout(new BorderLayout());
 		panel2.setBorder(BorderFactory.createEtchedBorder());
 		TitledBorder border2 = new TitledBorder("Select Tea Category");
-		border2.setTitleFont(new Font("Arial", Font.ITALIC, 25));
+		border2.setTitleFont(new Font("Arial", Font.BOLD, 20));
+		border2.setTitleColor(new Color(6, 104, 35));
 		border2.setTitleJustification(TitledBorder.LEFT);
 		border2.setTitlePosition(TitledBorder.TOP);
 		panel2.setBorder(border2);
 		// add radio buttons
-		JRadioButton cat1 = new JRadioButton("OPA 1");
-		JRadioButton cat2 = new JRadioButton("OPA 2");
-		ButtonGroup bG2 = new ButtonGroup();
-		bG2.add(cat1);
-		bG2.add(cat2);
-		panel2.add(cat1);
-		panel2.add(cat2);
-		// read selected tea category
-		cat1.addActionListener(new ActionListener() {
+		JComboBox categorySelection = new JComboBox();
+		categorySelection.addItem("OPA");
+		categorySelection.addItem("OP1");
+		categorySelection.addItem("BOP");
+		categorySelection.addItem("BOPF");
+		categorySelection.addItem("BOP 1");
+		categorySelection.addItem("FBOP");
+		categorySelection.addItem("FBOPF");
+		categorySelection.setSize(new Dimension(100, 10));
+		panel2.add(categorySelection, BorderLayout.WEST);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				category = cat1.getText();
-				cat2.setEnabled(false);
-			}
-		});
-
-		cat2.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				category = cat2.getText();
-				cat1.setEnabled(false);
-			}
-		});
 		/****************************************** panel3 ******************/
 		panel3 = new JPanel(new BorderLayout(10, 10));
 		startButton = new JButton("Start");
 		resetButton = new JButton("Reset");
-		int[] timeStrings = { 1,2,5,10,20,30 };
-		
+		int[] timeStrings = { 1, 2, 5, 10, 20, 30 };
+
 		JComboBox timeList = new JComboBox();
 		timeList.addItem(1);
 		timeList.addItem(2);
@@ -172,21 +161,25 @@ public class Window3 {
 		timeList.addItem(30);
 		timeList.setSize(5, 10);
 		JLabel noOfFrames = new JLabel("Capturing Time:");
-		
-		noOfFrames.setFont(new Font("Arial", Font.BOLD, 25));
+
+		noOfFrames.setFont(new Font("Arial", Font.BOLD, 20));
+
 		JPanel inputLabels = new JPanel();
 		JPanel inputField = new JPanel();
 		JPanel controlinputs = new JPanel(new BorderLayout());
 		JPanel controls = new JPanel();
 		controls.add(startButton);
-		controls.add(resetButton);
 		controls.add(statistics);
 		controls.add(result);
+		controls.add(resetButton);
 		inputLabels.add(noOfFrames);
 		inputField.add(timeList);
 		controlinputs.add(inputLabels, BorderLayout.WEST);
 		controlinputs.add(inputField, BorderLayout.CENTER);
 		panel3.add(controlinputs, BorderLayout.WEST);
+		startButton.setBackground(new Color(6, 104, 35));
+		startButton.setOpaque(true);
+		resetButton.setBackground(Color.red);
 
 		// reset button functions
 		resetButton.addActionListener(new ActionListener() {
@@ -194,15 +187,14 @@ public class Window3 {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				bG.clearSelection();
-				bG2.clearSelection();
+				categorySelection.setSelectedIndex(0);
+				timeList.setSelectedIndex(0);
 				stem.setEnabled(true);
 				leaf.setEnabled(true);
-				cat1.setEnabled(true);
-				cat2.setEnabled(true);
 				panel5.remove(imgLabel);
 				panel5.validate();
 				panel5.repaint();
-				
+
 				sensitivitySlider.setValue(0);
 				type = null;
 				category = null;
@@ -261,7 +253,7 @@ public class Window3 {
 		panel4 = new JPanel(new BorderLayout());
 		ImageIcon loadingIcon = new ImageIcon(this.getClass().getResource("/com/Sortex/images/loader1.gif"));
 		Image image = loadingIcon.getImage(); // transform it
-		Image newimg = image.getScaledInstance(600, 20, Image.SCALE_FAST);
+		Image newimg = image.getScaledInstance(500, 30, Image.SCALE_FAST);
 		loadingIcon = new ImageIcon(newimg); // transform it back
 		imgLabel = new JLabel(loadingIcon);
 		panel4.add(controls, BorderLayout.CENTER);
@@ -312,16 +304,21 @@ public class Window3 {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				int temp = (int) timeList.getItemAt(timeList.getSelectedIndex());
-				numberOfFrames = temp*3600;
-				
+				numberOfFrames = temp * 3600;
+
 				System.out.println(temp);
 				com.Sortex.controller.TCPClient.NUMBER_OF_FRAMES = numberOfFrames;
-				// System.out.println("Number of Frames : " + numberOfFrames);
 
 				Thread thread = new Thread() {
 					public void run() {
-
+						long startTime = System.currentTimeMillis();
 						panel5.add(imgLabel, BorderLayout.PAGE_START);
+						panel5.validate();
+						panel5.repaint();
+						while (System.currentTimeMillis() < startTime + (2*60000));
+							
+					    
+						panel5.remove(imgLabel);
 						panel5.validate();
 						panel5.repaint();
 
@@ -329,7 +326,7 @@ public class Window3 {
 				};
 				thread.start();
 
-				if ( bG.getSelection() == null || bG2.getSelection() == null) {
+				if (bG.getSelection() == null) {
 
 					JOptionPane.showMessageDialog(null, "Please Fill all the details");
 				} else {
@@ -340,10 +337,10 @@ public class Window3 {
 								try {
 									com.Sortex.controller.TCPClient.train("stemRowData");
 								} catch (UnknownHostException e) {
-									// TODO Auto-generated catch block
+
 									e.printStackTrace();
 								} catch (IOException e) {
-									// TODO Auto-generated catch block
+
 									e.printStackTrace();
 								}
 								BufferedReader br = null;
@@ -370,7 +367,7 @@ public class Window3 {
 											stringBuffer[i++] = line;
 										}
 									} catch (IOException e) {
-										// TODO Auto-generated catch block
+
 										e.printStackTrace();
 									}
 
@@ -387,13 +384,13 @@ public class Window3 {
 								try {
 									com.Sortex.controller.TCPClient.train("leafRowData");
 								} catch (UnknownHostException e) {
-									// TODO Auto-generated catch block
+
 									e.printStackTrace();
 								} catch (IOException e) {
-									// TODO Auto-generated catch block
+
 									e.printStackTrace();
 								}
-								
+
 								BufferedReader br = null;
 								String[] stringBuffer = new String[3];
 								String line;
@@ -418,7 +415,6 @@ public class Window3 {
 											stringBuffer[i++] = line;
 										}
 									} catch (IOException e) {
-										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
 
@@ -429,7 +425,6 @@ public class Window3 {
 						thread2.start();
 
 					}
-			
 
 				}
 
@@ -440,9 +435,9 @@ public class Window3 {
 				new Insets(2, 2, 2, 2), 0, 0));
 		container.add(panel2, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(2, 2, 2, 2), 0, 0));
-		container.add(tempPanel, new GridBagConstraints(0, 1, 2, 1, 1, 1, GridBagConstraints.WEST,
+		container.add(tempPanel, new GridBagConstraints(0, 2, 2, 1, 1, 1, GridBagConstraints.WEST,
 				GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-		container.add(panel3, new GridBagConstraints(0, 2, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+		container.add(panel3, new GridBagConstraints(0, 1, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(2, 2, 2, 2), 5, 5));
 		container.add(panel4, new GridBagConstraints(0, 3, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(2, 2, 2, 2), 0, 0));
@@ -452,8 +447,7 @@ public class Window3 {
 	}
 
 	public void runexe(String commandline) {
-		// String commandline =
-		// "E:\\Semester8\\fyp\\Sorter\\Sorter\\for_testing\\Sorter.exe";
+
 		try {
 			String line;
 			Process p = Runtime.getRuntime().exec(commandline);
@@ -487,7 +481,6 @@ public class Window3 {
 		slider.setMajorTickSpacing(mjrTkSp);
 		slider.setMinorTickSpacing(mnrTkSp);
 		slider.setPaintLabels(true);
-		// slider.addChangeListener(new SliderListener());
 		return slider;
 	}
 
@@ -517,7 +510,7 @@ public class Window3 {
 		gbc.insets = new Insets(6, 6, 6, 6);
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 		gbc.fill = GridBagConstraints.VERTICAL;
-
+		JButton backButton = new JButton("Back");
 		frame.add(mainPanel);
 		frame.setSize(800, 480);
 		JPanel panel1 = new JPanel();
@@ -526,19 +519,21 @@ public class Window3 {
 		JButton prevButton = new JButton("Previous");
 		panel2.add(nextButton);
 		panel2.add(prevButton);
-
+		panel2.add(backButton);
 		File[] fileList = readImages(folderName);
-
 		String imagepath = folderName + "/" + fileList[0].getName();
-
-		// System.out.println(imagepath);
 		frameIcon = new ImageIcon(imagepath);
-		frameimage = frameIcon.getImage(); // transform it
-		newframeimg = frameimage.getScaledInstance(200, 150, Image.SCALE_FAST);
-		frameIcon = new ImageIcon(newframeimg);
 		frameLabel = new JLabel(frameIcon);
 		panel1.add(frameLabel);
 		currentPosition = 0;
+		backButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				frame.dispose();
+
+			}
+		});
 
 		nextButton.addActionListener(new ActionListener() {
 
@@ -552,9 +547,6 @@ public class Window3 {
 					String imagepath = folderName + "/" + fileList[currentPosition].getName();
 					System.out.println(imagepath);
 					frameIcon = new ImageIcon(imagepath);
-					frameimage = frameIcon.getImage(); // transform it
-					newframeimg = frameimage.getScaledInstance(200, 150, Image.SCALE_FAST);
-					frameIcon = new ImageIcon(newframeimg);
 					frameLabel = new JLabel(frameIcon);
 
 					panel1.add(frameLabel);
@@ -577,9 +569,6 @@ public class Window3 {
 					String imagepath = folderName + "/" + fileList[currentPosition].getName();
 					System.out.println(imagepath);
 					frameIcon = new ImageIcon(imagepath);
-					frameimage = frameIcon.getImage(); // transform it
-					newframeimg = frameimage.getScaledInstance(200, 150, Image.SCALE_FAST);
-					frameIcon = new ImageIcon(newframeimg);
 					frameLabel = new JLabel(frameIcon);
 
 					panel1.add(frameLabel);
@@ -593,8 +582,8 @@ public class Window3 {
 		mainPanel.add(panel1, new GridBagConstraints(0, 1, 3, 1, 2, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(2, 2, 2, 2), 0, 0));
 
-		mainPanel.add(panel2, new GridBagConstraints(0, 2, 1, 1, 2, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
-				new Insets(2, 2, 2, 2), 0, 0));
+		mainPanel.add(panel2, new GridBagConstraints(0, 2, 1, 1, 2, 1, GridBagConstraints.PAGE_END,
+				GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
 
 	}
 
