@@ -32,7 +32,7 @@ public class FileHandler {
 			String name = dir.getName() + "/" + list[inc].getName();
 			ImageReader ryuv = new ImageReader(width, height);
 //			ryuv.startReading(name);
-			currentImage = ryuv.getBufferedImage8bit(name);
+			currentImage = ryuv.getBufferedImage24bit(name);
 			
 			String path = fileName+"/" + list[inc].getName().split("[.]")[0]+".gif" ;
 			try {
@@ -50,7 +50,7 @@ public class FileHandler {
 	public static void saveAsGIF(int width,int height,String path){
 		ImageReader imageReader = new ImageReader(width, height);
 
-		BufferedImage currentImage = imageReader.getBufferedImage8bit(path);
+		BufferedImage currentImage = imageReader.getBufferedImage24bit(path);
 		
 		String outFileName = path.split("[.]")[0]+".gif" ;
 		try {
