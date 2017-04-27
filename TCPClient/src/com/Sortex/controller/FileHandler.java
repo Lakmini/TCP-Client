@@ -30,9 +30,10 @@ public class FileHandler {
 		new File(fileName).mkdir();
 		for (int inc = 0; inc < list.length; inc++) {
 			String name = dir.getName() + "/" + list[inc].getName();
-			ReadYUYV ryuv = new ReadYUYV(width, height);
-			ryuv.startReading(name);
-			currentImage = ryuv.getImage();
+			ImageReader ryuv = new ImageReader(width, height);
+//			ryuv.startReading(name);
+			currentImage = ryuv.getBufferedImage8bit(name);
+			
 			String path = fileName+"/" + list[inc].getName().split("[.]")[0]+".gif" ;
 			try {
 
@@ -45,7 +46,22 @@ public class FileHandler {
 		}
 
 	}
+	
+	public static void saveAsGIF(int width,int height,String path){
+		ImageReader imageReader = new ImageReader(width, height);
 
+		BufferedImage currentImage = imageReader.getBufferedImage8bit(path);
+		
+		String outFileName = path.split("[.]")[0]+".gif" ;
+		try {
+
+			ImageIO.write(currentImage, "GIF", new File(outFileName));
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+	}
+	
 	public static void writeFile(byte[] rawData, String fileName,String directoryName) {
 //		System.out.println("Writing row datafiles ..............");
 		new File(directoryName).mkdir();

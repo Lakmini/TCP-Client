@@ -104,6 +104,9 @@ public class TCPClient {
 
 	// note :main method changed as train()
 	public static void train(String folderName) throws UnknownHostException, IOException {
+		
+		FileHandler.saveAsGIF(1280, 1024, "out.bin");
+		
 		buildServerConnection();
 		byte[] _32bitframe = new byte[4];
 		for (byte b1 : _32bitframe) {
