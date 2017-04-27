@@ -5,3 +5,5 @@ TCPClient/stemRowData/*
 TCPClient/leafRowData/*
 TCPClient/testInLeaf/*
 TCPClient/testInStem/*
+leaf/*
+stem/*
